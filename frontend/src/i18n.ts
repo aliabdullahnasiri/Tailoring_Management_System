@@ -16,6 +16,9 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Account|حساب کاربری|حساب
+Shop owner|مالک دکان|د دوکان مالک
+Shop|دکان|دوکان
 Language|زبان|ژبه
 Dashboard|داشبورد|ډشبورډ
 Customers|مشتریان|پېرودونکي
