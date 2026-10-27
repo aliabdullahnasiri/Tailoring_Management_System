@@ -44,3 +44,18 @@ html[dir=rtl] body{line-height:1.85}html[dir=rtl] .nav-item{font-size:14px}html[
 .theme-switcher>svg{position:absolute;inset-inline-start:10px;pointer-events:none}
 .theme-switcher select{padding-inline-start:34px;padding-inline-end:8px;min-height:40px;max-width:125px;font-size:12px}
 @media(max-width:400px){.topbar .breadcrumb>span{display:none}.theme-switcher select{max-width:110px}.topbar .breadcrumb{font-size:10px}}
+
+/* Compact navigation is desktop-only; mobile keeps the full slide-out menu. */
+.sidebar-toggle{min-width:40px;min-height:40px}
+[dir=rtl] .sidebar-toggle svg{transform:scaleX(-1)}
+@media(min-width:721px){
+ .sidebar-mini .sidebar{width:76px;padding-inline:12px}
+ .sidebar-mini .workspace{margin-inline-start:76px;width:calc(100% - 76px)}
+ .sidebar-mini .brand{justify-content:center;padding:0}
+ .sidebar-mini .brand-mark{width:38px;flex-shrink:0}
+ .sidebar-mini .brand-copy,.sidebar-mini .shop-label>div,.sidebar-mini .nav-label,.sidebar-mini .nav-text,.sidebar-mini .sidebar-bottom{display:none}
+ .sidebar-mini .shop-label{justify-content:center;padding:10px 0;margin:26px 0 20px}
+ .sidebar-mini .nav-item{position:relative;justify-content:center;gap:0;min-height:46px;padding:13px 0}
+ .sidebar-mini .nav-count{position:absolute;inset-inline-end:-4px;top:0;font-size:9px;padding:1px 3px;max-width:32px;overflow:hidden}
+}
+@media(max-width:720px){.sidebar-toggle{display:none}}

@@ -16,6 +16,8 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Expand sidebar|باز کردن نوار کناری|اړخیز پټی پراخ کړئ
+Collapse sidebar|جمع کردن نوار کناری|اړخیز پټی راټول کړئ
 System|سیستم|سیسټم
 Appearance|ظاهر|بڼه
 Theme|پوسته|رنګیزه بڼه
