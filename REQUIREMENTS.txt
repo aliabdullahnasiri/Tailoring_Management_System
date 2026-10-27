@@ -1,0 +1,630 @@
+A good Tailoring Management System (TMS) for Afghanistan should not feel like complicated accounting software. It should feel like a helpful assistant for a tailor: it tracks customers, measurements, orders, delivery dates, payments, and expenses so the tailor can focus on making clothes.
+
+For your project, I recommend building an offline-first, simple, Dari/Pashto-friendly tailoring management system that works for small tailoring shops and can later grow into a system for larger businesses.
+
+# Product Requirements Document (PRD)
+
+# TMS — Tailoring Management System
+
+Version 1.0 · October 2026 · Afghanistan
+
+Offline-first
+
+Small businesses
+
+Customer-focused
+
+Mobile-friendly
+
+## 1. Product overview
+
+Product name: TMS — Tailoring Management System
+
+Product vision: Help Afghan tailors manage their shops professionally, reduce mistakes, deliver clothes on time, and understand how much money they earn without needing advanced computer skills.
+
+The system should replace paper notebooks, scattered WhatsApp messages, and manual calculations with one simple application.
+
+### The problems we want to solve
+
+Lost customer measurements
+
+Measurements written in notebooks can be lost, damaged, or confused between customers. Store measurements under each customer's profile.
+
+Late orders and forgotten deliveries
+
+Show which orders are due today, overdue, or ready for collection.
+
+Confusing payments and customer debts
+
+Track the total price, advance payment, remaining balance, and payment history for every order.
+
+Customers asking about their clothes
+
+Quickly search an order and tell the customer whether it is being made, ready, or delivered.
+
+Not knowing the real business result
+
+Show sales, collected payments, unpaid balances, expenses, and estimated profit in simple reports.
+
+## 2. Target customers in Afghanistan
+
+The first version should serve one tailoring shop, not every possible type of clothing business.
+
+[Fashion Changes with the Government](https://images.openai.com/static-rsc-4/LVTccGPyRgg-5c0NVvuz3nxfn1D8FbNXtaxnDcK0GpRnImw4wLx1iWQmNbW6__QFNagiHnNINPwl5Ba8V2KaoDHniWEijsAlZOVNUpID4bhcpDP5gD_ll9BDfNBrBRXY-oUtb6MkY21QsNwI4pxvlYVDrQ1U_OZETvZK9zlpzDw?purpose=inline)
+
+Independent neighborhood tailors
+
+Need an easy way to remember measurements, track orders, and collect payments without hiring an accountant.
+
+[Tailor Shop Make Shalwar Kamiz In Afghanistan](https://images.openai.com/static-rsc-4/5jUwK2sG1zst1f750-R0dj4UvgOr4jvL_z5RzM31zgn-Ed1Xz4QOQHDVdk6SJQLJj4cdOF4VGbohX2v0DzyBEMy8Pr6v0FG75YJfl7Kd8k4lc8rxBHtyD8lWMi6h9ro1hr7Aw0tOOr9loABaGutaEMoRe-r7MGePeQkeI3Zn9a3XJf3RNf9Zjblo7m3i6EzP?purpose=inline)
+
+Men's and women's clothing shops
+
+Need different measurement fields and reusable measurement profiles for traditional clothing and custom outfits.
+
+[People starting small business working in tailor shop](https://images.openai.com/static-rsc-4/JA2Oxfz9e5Z0E2mbAFEZo219JN904VvYZRB_m0kzc8CwOv82f3pBQlYnKPKMzXHP5FJJlTFnxEUTDcwVkGcWc5oAX326xKHFXZZM1T7QTe1cLIU9m2pz1PKCxPEh2OixTwFgbkZxS9lGpXKTnGE79WGnsS89SuQ1Lwg56t7zgq1sM8ywWGicsnsVefmXBpOC?purpose=inline)
+
+Alteration and repair shops
+
+Need quick order entry, clear prices, deadlines, and a record of completed work.
+
+### Local requirements
+
+The product should be designed around how these businesses operate:
+
+- Languages: English initially for development, with a structure ready for Dari and Pashto, including right-to-left layouts.
+- Currency: Afghan afghani (AFN / ؋), with consistent formatting.
+- Internet: The main features must work without an internet connection.
+- Hardware: Support ordinary Windows computers and laptops, with a simple installation process.
+- Dates: Display clear, consistent dates, with a future option for Solar Hijri (Shamsi) dates.
+- Printing: Produce simple receipts suitable for ordinary A4 printers and smaller receipt printers where supported.
+- Usability: Large, clear buttons, simple forms, searchable lists, and understandable error messages.
+- Privacy: Keep customer contact details and measurements on the shop's computer by default.
+
+These are product design requirements based on the intended market, rather than claims that every Afghan shop has identical needs.
+
+## 3. Product goals and non-goals
+
+### Goals for version 1
+
+1. Create a customer record in less than one minute.
+2. Save and reuse customer measurements.
+3. Create an order in a few simple steps.
+4. Track order status and promised delivery date.
+5. Calculate deposits and remaining balances automatically.
+6. Print a clear receipt for the customer.
+7. Show the shop owner what needs attention today.
+8. Protect records from accidental loss with backup and restore.
+
+### Not included in the first version
+
+To keep the application simple and realistic to build, postpone:
+
+- Multi-branch business management.
+- Online accounts and cloud synchronization.
+- SMS, WhatsApp, and automated messaging.
+- Full inventory and fabric stock management.
+- Employee payroll and attendance.
+- Advanced accounting and tax management.
+- Customer-facing mobile apps.
+- AI-based measurements or clothing design.
+
+The first version should solve the daily problems well before adding advanced features.
+
+## 4. Core features and requirements
+
+Priority: P0 = required for launch, P1 = valuable next, P2 = later.
+
+### 4.1 Dashboard
+
+The dashboard should answer one question: What should I do today?
+
+Illustrative dashboard — sample data
+
+Active orders
+
+# 18
+
+Due today
+
+# 5
+
+Ready to collect
+
+# 3
+
+Outstanding balances
+
+# 12,500 ؋
+
+Needs attention
+
+Overdue orders
+
+2 orders have passed their delivery dates
+
+Ready for pickup
+
+3 completed orders awaiting customers
+
+The figures above are examples for the product design, not real business data.
+
+Requirements:
+
+- P0: Display active orders, today's due orders, ready orders, and unpaid balances.
+- P0: Highlight overdue orders.
+- P0: Provide quick actions for new customer and new order.
+- P1: Show daily and monthly sales summaries.
+
+### 4.2 Customer management
+
+Each customer should have one profile containing their basic information and history.
+
+| Field               | Requirement                               |
+| ------------------- | ----------------------------------------- |
+| Customer name       | Required                                  |
+| Phone number        | Optional                                  |
+| Notes               | Optional                                  |
+| Created date        | Automatic                                 |
+| Measurements        | Linked profiles                           |
+| Order history       | Linked orders                             |
+| Outstanding balance | Calculated from payments and order totals |
+
+Requirements:
+
+- P0: Add, edit, view, and search customers.
+- P0: Search by name or phone number.
+- P0: Warn about possible duplicate customers.
+- P0: View previous orders and measurements from the customer profile.
+- P1: Add an optional photo or customer reference image.
+
+Customer-friendly improvement: When a returning customer visits, the tailor should find their profile and start an order without entering their information again.
+
+### 4.3 Measurement management
+
+Measurements are one of the most valuable features of a tailoring system. They must be easy to save, read, and reuse.
+
+Each measurement profile should include:
+
+- Customer.
+- Measurement profile name, such as Men's Shalwar Kameez.
+- Clothing type.
+- Relevant measurements.
+- Notes and fitting preferences.
+- Last updated date.
+
+Example measurement fields can include:
+
+| Men's clothing | Women's clothing |
+| -------------- | ---------------- |
+| Chest          | Bust             |
+| Shoulder       | Shoulder         |
+| Sleeve length  | Sleeve length    |
+| Shirt length   | Shirt length     |
+| Waist          | Waist            |
+| Hip            | Hip              |
+| Trouser length | Dress length     |
+| Neck           | Neck             |
+
+The actual fields should depend on the clothing type. Avoid showing every possible field on every form.
+
+Requirements:
+
+- P0: Create and edit measurement profiles.
+- P0: Reuse saved measurements when creating a new order.
+- P0: Keep previous measurement values available when measurements change.
+- P0: Allow notes such as loose fitting, narrow sleeves, or preferred length.
+- P1: Copy a profile to create a new version quickly.
+
+Important rule: Editing a customer's current measurements must not silently change measurements already associated with an existing order. An order should retain the measurements used when it was created, so the tailor can refer back to them.
+
+### 4.4 Order management
+
+An order is the center of the application.
+
+Each order should contain:
+
+- Unique order number.
+- Customer.
+- One or more clothing items.
+- Item quantity and price.
+- Measurement profile or saved measurement snapshot.
+- Order date.
+- Promised delivery date.
+- Current status.
+- Special instructions.
+- Total amount, payments, and remaining balance.
+
+Order statuses:
+
+Pending
+
+Order has been accepted but work has not started.
+
+In progress
+
+The tailor is working on the clothing.
+
+Ready
+
+The clothing is ready for collection.
+
+Delivered
+
+The customer has collected the clothing.
+
+Requirements:
+
+- P0: Create an order for an existing or newly created customer.
+- P0: Add multiple clothing items to one order.
+- P0: Set a promised delivery date.
+- P0: Change status with a simple action.
+- P0: Search and filter orders by number, customer, status, and date.
+- P0: Display overdue orders clearly.
+- P0: Record delivery and its date.
+- P1: Add item-level photos and alteration instructions.
+
+Customer-friendly improvement: Show a simple order progress indicator so the owner can immediately explain the order's current status.
+
+### 4.5 Payments and balances
+
+The payment system must be clear and trustworthy.
+
+Example:
+
+Sample order #TMS-0001
+
+Total price
+
+## 3,000 ؋
+
+Advance payment
+
+### 1,000 ؋
+
+Remaining balance
+
+# 2,000 ؋
+
+Illustrative amounts. Balance = total price − payments received.
+
+Requirements:
+
+- P0: Record advance payments and later payments.
+- P0: Support multiple partial payments.
+- P0: Calculate remaining balance automatically.
+- P0: Show payment history with dates and amounts.
+- P0: Print a receipt after recording a payment.
+- P0: Prevent accidental duplicate payment entries.
+- P0: Correct mistakes through a recorded reversal or adjustment rather than silently deleting payment history.
+- P1: Support payment method labels such as cash or bank transfer.
+
+Use AFN as the default currency. Do not confuse the order's total value with money actually received.
+
+### 4.6 Receipts and printing
+
+Every order should have a simple printable document.
+
+A receipt should include:
+
+- Shop name and optional contact information.
+- Receipt number and order number.
+- Customer name and phone number, if provided.
+- Clothing items and quantities.
+- Total price.
+- Amount paid.
+- Remaining balance.
+- Promised delivery date.
+- Current order status.
+- Payment date and a thank-you message.
+
+Requirements:
+
+- P0: Print an order receipt.
+- P0: Print a payment receipt.
+- P0: Support printing to PDF through the operating system where available.
+- P1: Allow the owner to configure the shop name and receipt header.
+
+The receipt should be readable in black and white. Expensive printers or color printing must not be required.
+
+### 4.7 Basic reports
+
+The owner should understand business activity without needing accounting knowledge.
+
+| Report               | What it answers                                   |
+| -------------------- | ------------------------------------------------- |
+| Daily orders         | How much work did we accept today?                |
+| Monthly orders       | How many orders were accepted and completed?      |
+| Payments received    | How much money came into the shop?                |
+| Outstanding balances | How much do customers still owe?                  |
+| Overdue orders       | Which customers are waiting longer than promised? |
+| Delivered orders     | Which orders have been collected?                 |
+
+Important: The first version should not claim to calculate true net profit because it does not track all business expenses and costs. Show order revenue, collected payments, and unpaid balances as separate figures.
+
+## 5. The ideal user experience
+
+The system should feel natural even for a shop owner who has never used business software before.
+
+### Main navigation
+
+Use only six main sections:
+
+Dashboard
+
+Today's work and important alerts
+
+Customers
+
+Customer profiles and measurements
+
+Orders
+
+Create, update, and deliver orders
+
+Payments
+
+Payments and outstanding balances
+
+Reports
+
+Daily and monthly business summaries
+
+Settings
+
+Shop details, language, and backups
+
+### The main workflow
+
+1\. Select or add customer
+
+2\. Select or save measurements
+
+3\. Create order and set delivery date
+
+4\. Record price and advance payment
+
+5\. Track work until it is ready
+
+6\. Collect remaining payment and deliver
+
+The system should automatically calculate totals, balances, and order numbers. Users should not need to perform these calculations themselves.
+
+## 6. Technical requirements
+
+Since the initial goal is a small, local application that works offline, keep the architecture simple.
+
+React + TypeScript
+
+User interface, forms, tables, dashboard, and printing
+
+FastAPI
+
+Validation, business rules, order processing, and reports
+
+SQLAlchemy + SQLite
+
+Local database stored on the shop's computer
+
+### Recommended technology stack
+
+| Component                    | Technology                                      |
+| ---------------------------- | ----------------------------------------------- |
+| Frontend                     | React, TypeScript, Vite                         |
+| Backend                      | FastAPI                                         |
+| Validation                   | Pydantic v2                                     |
+| ORM                          | SQLAlchemy 2                                    |
+| Database                     | SQLite                                          |
+| Database migrations          | Alembic                                         |
+| Python dependency management | uv                                              |
+| API communication            | Local HTTP API                                  |
+| Packaging                    | PyInstaller for backend; desktop shell optional |
+| Testing                      | pytest, HTTPX, frontend component tests         |
+
+The database URL for development can be:
+
+```
+DATABASE_URL = "sqlite:///./data/tailoring.db"
+```
+
+For the installed application, store the database in a persistent application-data directory rather than relying on the current working directory. Otherwise, updates or launching the application from a different location could create a new, apparently empty database.
+
+### Offline requirements
+
+- All essential features must work without internet.
+- The frontend assets must be available locally.
+- The backend must run on the same computer.
+- Customer records must remain after closing and reopening the application.
+- Database migrations must run safely when the application is updated.
+- Backup and restore must work without a cloud service.
+- No external fonts, scripts, or APIs should be required for basic operation.
+
+A desktop package can make installation easier for nontechnical users. A browser-based local application is sufficient during development; packaging it as a desktop application can come later.
+
+## 7. Data model
+
+Keep the database small and organized. The core entities are:
+
+Customer
+
+Name · Phone · Notes
+
+MeasurementProfile
+
+Customer · Type · Measurements · Version
+
+Order
+
+Customer · Dates · Status · Total · Measurement snapshot
+
+OrderItem
+
+Order · Clothing type · Quantity · Unit price · Instructions
+
+Payment
+
+Order · Amount · Date · Method · Receipt number
+
+Additional tables:
+
+- `ShopSettings` — shop name, contact information, language, currency, and receipt settings.
+- `PaymentAdjustment` or equivalent payment reversal records — correction history.
+- `OrderStatusHistory` — optional in the initial release, but useful for tracking status changes and their timestamps.
+
+Use UUIDs or another stable internal identifier, with human-readable order numbers such as `TMS-0001`.
+
+Store individual measurement values in a flexible structure, but validate the expected fields for each clothing type. Keep monetary values in a consistent fixed-precision representation, such as integer AFN amounts when fractional currency is not needed.
+
+## 8. Security, reliability, and data protection
+
+Even a small offline application needs reliable data handling.
+
+P0 requirements:
+
+- Validate all input on the backend.
+- Use database transactions when creating orders and recording payments.
+- Prevent negative payment amounts and invalid order totals.
+- Do not silently delete payment history.
+- Make backups to a user-selected location, such as a USB drive.
+- Provide a clear restore process and warn before overwriting existing data.
+- Test that a backup can actually be restored.
+- Keep the backend bound to the local machine by default.
+- Do not expose the API to the local network without deliberate configuration.
+
+For the first single-user release, a login system is not essential. However, the application should not be exposed to other devices by default, and customer records should be protected by the computer's own user account and access controls.
+
+## 9. Acceptance criteria
+
+The MVP is ready for release when all the following tests pass.
+
+## Release checklist
+
+0 of 10
+
+Customer records
+
+Create, edit, search, and reopen customer records without losing data.
+
+Measurements
+
+Save measurements, reuse them, and preserve the measurements linked to older orders.
+
+Order creation
+
+Create an order with multiple clothing items and a promised delivery date.
+
+Order tracking
+
+Move an order through its statuses and identify overdue orders correctly.
+
+Payments
+
+Record several partial payments and calculate the remaining balance correctly.
+
+Receipts
+
+Print order and payment receipts with correct amounts and customer information.
+
+Dashboard
+
+Show accurate counts for active, due, ready, and overdue orders.
+
+Offline operation
+
+Create and manage records with the internet disconnected.
+
+Data recovery
+
+Back up the database, restore it, and verify that customers, orders, and payments remain consistent.
+
+Usability
+
+A new user can create a customer, order, and advance payment without technical assistance.
+
+Copy checklist
+
+## 10. Development roadmap
+
+For a small project with a short initial development window, focus on completing one working workflow before expanding.
+
+Phase 1
+
+Foundation
+
+Set up FastAPI, SQLAlchemy, SQLite, migrations, React, and the main layout. Implement customer records and measurements.
+
+Phase 2
+
+Orders and payments
+
+Implement multi-item orders, status transitions, delivery dates, payment history, and automatic balances.
+
+Phase 3
+
+Dashboard and receipts
+
+Add due-order alerts, outstanding balances, printable receipts, and simple reports.
+
+Phase 4
+
+Testing and delivery
+
+Test offline operation, database persistence, backup and restore, usability, and installation.
+
+The first usable version can be built in a few days if the scope stays limited and the interface remains simple. Thorough testing, reliable backup and restore, and packaging may require additional time.
+
+## 11. Features that can make customers love the product
+
+These are the improvements most likely to make the application feel useful in daily work. Prioritize them after the core workflow is reliable.
+
+[Ladies Tailor Bill Book/ Invoice / Receipt Copy | for Boutique/ Tailoring |](https://images.openai.com/static-rsc-4/fBjQMGj9Mrwm4sH_GHdonyk-WGtSzEEkEGrSJbKMxuJoZekUFK-3lR72uz9JV-vNJjC108T_p8l85cJpZHdT5QdJ4jtEwC_h2ffLeWN4uU9NlPKtM5dcKPquRxwdZfou7wqWKjqCCZwHEzitEb9Mz7QblvxbQwSRqIQr1X2qiNM?purpose=inline)
+
+1\. A professional order slip
+
+Every customer receives a clear record of the order, promised date, total price, and advance payment.
+
+[Selective focus Young asian man writing down measurements on notebook while use body measurement tape customer woman. Female client and tailor taking measurements with tape measures for sew clothes.](https://images.openai.com/static-rsc-4/HHQwlS75TJPySAq6L-fJ_KlYMUh1ki-AoSjVf9SUzp4z_x0-XZYTb-BJcH2o5NArq37YMUJlz_jiySjJZouAUk94TSYS8uo8AQXh3Q6kT41A6iyuJOW8pHquzuadZSqrb2xz13HdlxIq0VKsjRlh9M8W7fZP879exE6OCfvYsW0qMh4R21TetZebvhG-JGv_?purpose=inline)
+
+2\. One-click repeat order
+
+Select a returning customer, reuse their measurements, and create a new order without starting from zero.
+
+[Former Afghan King Zahir Shah](https://images.openai.com/static-rsc-4/I4-A4ococjdXQz_VYUSvtsK06gQ-QGYYd5LhEBDfA2p5GWzgfjD2UW8RJKBsnbm3IA4NDyqzvkLmuTxgtGA8qtJmeQl_Vh0UW-UUCdTcO53wFIc7koI3Jod0Mvcs11YwLozupsad17HP-vrtLzhGvg6wx9re5Rjp4656ecEBTIc3Bd922us2S5WPlhmJIpQM?purpose=inline)
+
+3\. A daily work list
+
+Show the orders due today, overdue orders, and clothing ready for collection in one place.
+
+[backing up data to an external flash drive. Secure data storage.](https://images.openai.com/static-rsc-4/dYCa8YAG_0XjqHgAkkMSwCmLWCf8IhgW53I6csUWmqpSbPEeAplX_7CTfCTu63oDRmMjGWRw31gFCPyBYNO5mq7Dd8gdNGiRU0BvzfbUR-2L6PONZhr0jamwCh54lqXzh_9j8dNZClvoqOVEWaAbDYg51yRBljBsquze6uP8Xt9n-xlhBLEj4cP1VKeyF-j9?purpose=inline)
+
+4\. Easy backup
+
+A simple “Back up my shop data” action helps protect the owner's business records without requiring technical knowledge.
+
+## 12. Success metrics
+
+Measure whether the product actually solves the problems it was built for.
+
+- Faster order entry: A returning customer's new order can be created in about one minute under normal conditions.
+- Accurate balances: Every order's balance matches its total minus recorded payments and adjustments.
+- Reliable records: No customer, order, or payment disappears after restarting the application.
+- Fewer missed deadlines: The owner can identify every overdue order from the dashboard.
+- Easy learning: A first-time user can complete the core workflow without reading a technical manual.
+- Successful recovery: A test backup can be restored with all related records intact.
+
+These are initial product targets, not proven results. Validate them with actual tailoring shop owners.
+
+## 13. Final product decision
+
+The strongest first release is a single-shop, offline-first tailoring management system with six essential capabilities:
+
+1. Customers and reusable measurements.
+2. Orders and delivery tracking.
+3. Advance payments and remaining balances.
+4. Printable receipts.
+5. A dashboard that shows what needs attention.
+6. Simple backup and restore.
+
+Build the first version with React, FastAPI, and SQLite. Keep the interface ready for Dari and Pashto, but do not delay the core workflow to implement every future feature.
+
+The guiding principle: A tailor should spend less time managing paperwork and more time making clothes. Every feature in the first version should support that goal.
