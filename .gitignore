@@ -1,0 +1,61 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.tsbuildinfo
+node_modules/
+frontend/dist/
+*.db
+*.db-wal
+*.db-shm
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code
+.claude/settings.local.json
+.claude/*.tmp.*
+
+# Logs
+*.log
+
+# PyInstaller generated files
+build/
+dist/
+
+# PyInstaller spec
+*.spec
+
+# SQLite / local development database
+*.db
+*.sqlite
+*.sqlite3
+
+# Project specific
+full_diff.txt
+
+# Celery
+celerybeat-schedule*
