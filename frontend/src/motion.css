@@ -1,0 +1,43 @@
+/* Short, finite motion: no idle animation and no delay before controls work. */
+@keyframes reveal-content {
+  from {opacity:0;translate:0 8px}
+  to {opacity:1;translate:0 0}
+}
+@keyframes reveal-overlay {
+  from {opacity:0}
+  to {opacity:1}
+}
+@keyframes reveal-dialog {
+  from {opacity:0;translate:0 12px;scale:.985}
+  to {opacity:1;translate:0 0;scale:1}
+}
+@media screen and (prefers-reduced-motion:no-preference) {
+  :root {--motion-ease:cubic-bezier(.2,.7,.2,1)}
+  main {animation:reveal-content 220ms var(--motion-ease)}
+  .auth-box {animation:reveal-content 260ms var(--motion-ease)}
+  .stat-grid>.stat-card {animation:reveal-content 280ms var(--motion-ease) backwards}
+  .stat-grid>.stat-card:nth-child(2) {animation-delay:35ms}
+  .stat-grid>.stat-card:nth-child(3) {animation-delay:70ms}
+  .stat-grid>.stat-card:nth-child(4) {animation-delay:105ms}
+  .modal-backdrop,.scrim {animation:reveal-overlay 160ms ease-out}
+  .modal {animation:reveal-dialog 220ms var(--motion-ease)}
+  .user-panel {animation:reveal-content 160ms var(--motion-ease)}
+  .toast {animation:reveal-content 200ms var(--motion-ease)}
+  .error {animation:reveal-overlay 160ms ease-out}
+  .sidebar {transition:width 220ms var(--motion-ease),padding 220ms var(--motion-ease),transform 220ms var(--motion-ease),background-color 180ms ease,border-color 180ms ease}
+  .workspace {transition:width 220ms var(--motion-ease),margin-inline-start 220ms var(--motion-ease)}
+  button,a {transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease,box-shadow 160ms ease,translate 160ms var(--motion-ease),scale 120ms ease}
+  .primary:active:not(:disabled),.secondary:active:not(:disabled),.icon:active:not(:disabled),.user-trigger:active {scale:.97}
+  .user-trigger>svg {transition:transform 160ms var(--motion-ease)}
+  .bar-track i {transition:width 300ms var(--motion-ease)}
+  input,select,textarea {transition:border-color 160ms ease,background-color 180ms ease,color 180ms ease}
+  html,.topbar,.card,.stat-card,.user-panel {transition:background-color 180ms ease,color 180ms ease,border-color 180ms ease,box-shadow 160ms ease,translate 160ms var(--motion-ease)}
+}
+@media screen and (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .primary:hover:not(:disabled),.secondary:hover:not(:disabled),.customer-card:hover,.stat-card:hover {translate:0 -2px;box-shadow:0 5px 14px #14281a12}
+  [data-theme="dark"] :is(.customer-card,.stat-card):hover {box-shadow:0 5px 14px #0003}
+}
+/* Also disable the older mobile-menu and button transitions. */
+@media (prefers-reduced-motion:reduce), print {
+  *,*::before,*::after {animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
