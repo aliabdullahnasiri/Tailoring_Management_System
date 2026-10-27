@@ -39,3 +39,8 @@ html[dir=rtl] body{line-height:1.85}html[dir=rtl] .nav-item{font-size:14px}html[
 .user-details{margin:0;padding:16px 20px;display:grid;gap:12px}.user-details dt{font-size:10px;color:#7c8881}.user-details dd{margin:4px 0 0;font-size:12px;overflow-wrap:anywhere}
 .user-actions{padding:7px;border-top:1px solid var(--line)}.user-actions button{display:flex;align-items:center;gap:10px;width:100%;min-height:42px;padding:10px 12px;border-radius:6px;text-align:start;font-size:12px}.user-actions button:hover{background:#f0f3ec}
 @media(max-width:600px){.user-trigger-name{display:none}.user-trigger{gap:5px}.top-right{gap:6px}}
+
+.theme-switcher{position:relative;display:flex;align-items:center;flex-shrink:0;color:inherit}
+.theme-switcher>svg{position:absolute;inset-inline-start:10px;pointer-events:none}
+.theme-switcher select{padding-inline-start:34px;padding-inline-end:8px;min-height:40px;max-width:125px;font-size:12px}
+@media(max-width:400px){.topbar .breadcrumb>span{display:none}.theme-switcher select{max-width:110px}.topbar .breadcrumb{font-size:10px}}

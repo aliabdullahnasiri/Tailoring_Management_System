@@ -16,6 +16,13 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+System|سیستم|سیسټم
+Appearance|ظاهر|بڼه
+Theme|پوسته|رنګیزه بڼه
+Use system setting|استفاده از تنظیم سیستم|د سیسټم تنظیم وکاروئ
+Light|روشن|روښانه
+Dark|تاریک|تیاره
+Choose a theme. Your preference is remembered in this browser.|پوسته را انتخاب کنید. انتخاب شما در این مرورگر ذخیره می‌شود.|یوه بڼه وټاکئ. ستاسو انتخاب په دې براوزر کې خوندي کېږي.
 Account|حساب کاربری|حساب
 Shop owner|مالک دکان|د دوکان مالک
 Shop|دکان|دوکان

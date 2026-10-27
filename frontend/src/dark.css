@@ -1,0 +1,45 @@
+/* Screen-only palette keeps printed receipts white with dark ink. */
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    color: #e0e9e2;
+    background: #111915;
+    --green: #326e54;
+    --line: #34443b;
+    --muted: #afbeb3;
+    --cream: #1d2922;
+  }
+  [data-theme="dark"] :is(.sidebar,.topbar,.card,.stat-card,.modal,.user-panel) {background:#1b2620;border-color:var(--line)}
+  [data-theme="dark"] :is(.auth-page,.auth-panel) {background:#111915}
+  [data-theme="dark"] .auth-story {background:#193d2d}
+  [data-theme="dark"] :is(input,select,textarea,.secondary) {background:#152019;color:#e0e9e2;border-color:#4a5e50}
+  [data-theme="dark"] input::placeholder,[data-theme="dark"] textarea::placeholder {color:#9dac9f}
+  [data-theme="dark"] :is(.shop-label,.brand-mark,.avatar,.auth-lock,.setting-icon,.security-panel,.quick-card,.note,.order-line,.order-totals,.balance-banner,.demo-banner,.progress-steps button,.progress-steps button span,.bar-track,.tabs span,.count,.nav-count) {background:#27382c;border-color:#3a4f3e;color:#c0d7b6}
+  [data-theme="dark"] :is(.nav-item.selected,.progress-steps button.done) {background:#304934;color:#d0e8c2}
+  [data-theme="dark"] :is(.nav-item:hover,.secondary:hover,.icon:hover,.customer-card:hover,.attention-row:hover,.user-actions button:hover,.user-trigger:hover,.user-trigger[aria-expanded="true"],tbody tr[tabindex]:hover) {background:#2a3c30}
+  [data-theme="dark"] :is(th,.tabs) {background:#18221c;border-color:var(--line)}
+  [data-theme="dark"] :is(td,.attention-row,.customer-card,.customer-card>small,.form-footer,.version,.auth-demo,.signout,.search,.measurement-card,.payment-line) {border-color:var(--line)}
+  [data-theme="dark"] :is(h1,h2,h3,strong,.brand,.brand small,.breadcrumb strong,.user-dropdown,.customer-card h3,td strong,.stat-card>strong,.daily-summary>strong,.quick-card h2,.order-totals strong,.balance-banner strong,.profile-summary strong,.measurement-values strong,.order-detail-top h3,.modal-heading h2,.detail-toolbar h3,.empty h3,.pipeline strong,.payment-line strong) {color:#e0e9e2}
+  [data-theme="dark"] :is(p,small,td,th,.nav-item,.nav-label,.eyebrow,.date,.breadcrumb,.stat-top,.stat-bottom,.summary>span,.muted,.field>span,.form-footer>span,.section-label,.line-heading,.language-picker,.auth-note,.offline,.version,footer,.user-details dt,.payment-line,summary,.tabs button,.pipeline button>div:first-child,.customer-card>div,.customer-card>small,.customer-card>div strong,.attention-row strong,.attention-row small,.empty,.empty p,.measurement-values strong span) {color:#afbeb3}
+  [data-theme="dark"] :is(.text-button,.quick-card button,.tabs button.active,.nav-item.selected svg,.success,.security-panel a,.loading) {color:#afd59b}
+  [data-theme="dark"] .tabs button.active {border-bottom-color:#afd59b}
+  [data-theme="dark"] .primary {background:#326e54;color:#fff}
+  [data-theme="dark"] .primary:hover {background:#3b8163}
+  [data-theme="dark"] .green {background:#2a402f!important;color:#bbd9aa!important}
+  [data-theme="dark"] :is(.orange,.attention-icon) {background:#443621;color:#ebc780}
+  [data-theme="dark"] .blue {background:#243c47;color:#a9d0e3}
+  [data-theme="dark"] .purple {background:#383047;color:#d1bee9}
+  [data-theme="dark"] .badge {background:#3a3c2c;color:#d2d5a8}
+  [data-theme="dark"] .badge.in-progress {background:#443a21;color:#ecd386}
+  [data-theme="dark"] .badge.ready {background:#2b422b;color:#b6d99f}
+  [data-theme="dark"] .badge.delivered {background:#2b3c44;color:#b8cdd8}
+  [data-theme="dark"] .warning {background:#443a21;border-color:#6c5b30;color:#ecd386}
+  [data-theme="dark"] .error {background:#442922;border-color:#775045;color:#ffc4b5}
+  [data-theme="dark"] .danger {color:#ffb5a3!important}
+  [data-theme="dark"] .toast {background:#2d5940;color:#fff}
+  [data-theme="dark"] .user-panel {box-shadow:0 12px 36px #0006}
+  [data-theme="dark"] :is(button,a,input,select,textarea,tr):focus-visible {outline-color:#a6d9be}
+}
+@media print {
+  :root[data-theme="dark"] {color-scheme:light!important;background:white;color:black}
+}
