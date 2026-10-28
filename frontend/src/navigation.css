@@ -21,7 +21,7 @@
 .top-right .date{display:flex;align-items:center;gap:7px;font-size:11px;white-space:nowrap;color:#84907b}
 .topbar-tools{padding-inline-end:14px;border-inline-end:1px solid var(--line)}
 .theme-switcher select{height:38px;min-height:38px;border-radius:10px;background:#f5f7f2;border-color:var(--line);color:#65785b}
-.user-trigger{padding:5px 8px;gap:10px;border:1px solid transparent;border-radius:11px;min-height:48px;max-width:210px;text-align:start}
+.user-trigger{padding:5px 8px;gap:10px;border:1px solid var(--line);border-radius:11px;min-height:48px;max-width:210px;text-align:start}
 .user-trigger:hover,.user-trigger[aria-expanded="true"]{border-color:var(--line)}
 .user-trigger .owner-avatar{width:36px;height:36px;border-radius:11px}
 .user-trigger-name{font-size:12px;font-weight:600;line-height:1.4;min-width:0}
@@ -58,3 +58,13 @@ html[lang=ps] .sidebar .brand-copy small{font-family:'Noto Sans Arabic',Tahoma,s
 
 .user-dropdown .owner-avatar{background:#e7ede2;color:#58714d}
 [data-theme="dark"] .user-dropdown .owner-avatar{background:#34483b;color:#c0d4b5}
+
+/* Localized wordmarks follow the selected language and bundled typeface. */
+html[dir=rtl] .sidebar .brand,html[dir=rtl] .auth-brand{direction:rtl}
+html[dir=rtl] .sidebar .brand-title{font-size:16px;font-weight:600;letter-spacing:0;line-height:1.65;text-align:start}
+html[lang=fa] .brand-title,html[lang=fa] .auth-brand{font-family:Vazirmatn,Tahoma,sans-serif}
+html[lang=ps] .brand-title,html[lang=ps] .auth-brand{font-family:'Noto Sans Arabic',Tahoma,sans-serif}
+.user-trigger{border-color:#d6e0d0;background:#f8faf5}
+.user-trigger:hover,.user-trigger[aria-expanded="true"]{border-color:#9db28e}
+[data-theme="dark"] .user-trigger{border-color:#4b6050;background:#233128}
+[data-theme="dark"] .user-trigger:hover,[data-theme="dark"] .user-trigger[aria-expanded="true"]{border-color:#809b70}

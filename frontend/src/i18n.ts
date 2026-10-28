@@ -6,7 +6,7 @@ const valid=(v:unknown):v is Language=>v==='en'||v==='fa'||v==='ps';
 let current:Language='en';
 try{const saved=localStorage.getItem(KEY);if(valid(saved))current=saved}catch{/* Browser storage may be unavailable. */}
 const listeners=new Set<()=>void>();
-function apply(){if(typeof document!=='undefined'){document.documentElement.lang=current;document.documentElement.dir=current==='en'?'ltr':'rtl';document.title=current==='fa'?'مدیریت خیاطی | Thread & Ledger':current==='ps'?'د خیاطۍ مدیریت | Thread & Ledger':'Thread & Ledger | Tailoring Management'}}
+function apply(){if(typeof document!=='undefined'){document.documentElement.lang=current;document.documentElement.dir=current==='en'?'ltr':'rtl';document.title=current==='fa'?'مدیریت خیاطی':current==='ps'?'د خیاطۍ مدیریت':'Tailor Studio | Tailoring Management'}}
 apply();
 export const language=()=>current;
 export function setLanguage(value:string){if(!valid(value))return;try{localStorage.setItem(KEY,value);}catch{/* Keep language switching usable if storage is unavailable. */}if(current!==value){current=value;apply();listeners.forEach(f=>f())}}
@@ -16,6 +16,7 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Tailor Studio|مدیریت خیاطی|د خیاطۍ مدیریت
 Your shop|دکان شما|ستاسو دوکان
 Shop settings|تنظیمات دکان|د دوکان تنظیمات
 Expand sidebar|باز کردن نوار کناری|اړخیز پټی پراخ کړئ
