@@ -10,6 +10,7 @@ import './style.css';
 import './dark.css';
 import './navigation.css';
 import './motion.css';
+import './forms.css';
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const money=(n:number)=>formatNumber(n)+' ؋';
 const localDay=(s:string)=>{const d=new Date(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
@@ -23,7 +24,15 @@ const sections=[['Dashboard',LayoutDashboard],['Customers',Users],['Orders',Shop
 async function api<T=any>(path:string,body?:unknown,method='POST'):Promise<T>{const res=await fetch('/api'+path,body===undefined?{}:{method,headers:{'Content-Type':'application/json','X-TMS-CSRF':csrfToken},body:JSON.stringify(body)});const value=await res.json();if(res.status===401&&!path.startsWith('/auth/'))window.dispatchEvent(new Event('tms-auth-change'));if(!res.ok)throw new Error(typeof value.detail==='string'?value.detail:(value.detail?.map((x:any)=>x.msg).join('; ')||'Could not save. Please try again.'));return value;}
 function Badge({status}:{status:string}){return <span className={'badge '+status.toLowerCase().replaceAll(' ','-')}><i/>{t(status)}</span>}
 function Empty({title,detail,action}:{title:string;detail:string;action?:ReactNode}){return <div className="empty"><Scissors size={28}/><h3>{t(title)}</h3><p>{t(detail)}</p>{action}</div>}
-function Field({label,children}:{label:string;children:ReactNode}){return <label className="field"><span>{t(label)}</span>{children}</label>}
+function Field({label,children}:{label:string;children:ReactNode}){
+ const control=React.isValidElement<{placeholder?:string;type?:string}>(children)?children:null;
+ const textControl=control&&(control.type==='input'||control.type==='textarea');
+ const hint=Boolean(control?.props.placeholder);
+ return <label className={`field floating-field${hint?' field-has-hint':''}`}>
+  {textControl?React.cloneElement(control,{placeholder:control.props.placeholder??' '}):children}
+  <span>{t(label)}</span>
+ </label>;
+}
 let csrfToken='';
 type AuthStatus={signup_allowed:boolean;authenticated:boolean;username:string|null;csrf:string|null;setup_key_required:boolean};
 async function refreshIdentity():Promise<AuthStatus>{const r=await fetch('/api/auth/status',{cache:'no-store'});if(!r.ok)throw new Error('Could not connect to the server.');const s=await r.json();csrfToken=s.csrf||'';return s}

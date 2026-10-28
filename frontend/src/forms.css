@@ -1,0 +1,40 @@
+/* Keep real form controls for autofill, validation, keyboard and mobile support. */
+:root{--field-surface:#fff;--field-border:#d9e2d6;--field-label:#71806b;--field-focus:#477a58;--picker-hover:#eef4e9;--picker-selected:#e3eedb}
+[data-theme="dark"]{--field-surface:#152019;--field-border:#425648;--field-label:#aabca8;--field-focus:#a5ce91;--picker-hover:#283c2d;--picker-selected:#354f39}
+.field.floating-field{position:relative;display:block;margin-bottom:18px;min-width:0}
+.floating-field>input,.floating-field>textarea,.floating-field>select{display:block;width:100%;min-height:58px;padding:25px 14px 9px;border-radius:11px;border:1px solid var(--field-border);background-color:var(--field-surface);line-height:1.5;font-size:13px;box-shadow:0 1px 2px #15291c03}
+.floating-field>textarea{min-height:112px;resize:vertical}
+.field.floating-field>span{position:absolute;inset-inline-start:14px;inset-inline-end:14px;top:18px;pointer-events:none;color:var(--field-label);font-size:13px;font-weight:400;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform-origin:top left}
+.floating-field:focus-within>span,.floating-field.field-has-hint>span,.field.floating-field:has(select)>span,.floating-field:has(input:not(:placeholder-shown))>span,.floating-field:has(textarea:not(:placeholder-shown))>span{top:7px;font-size:10px;font-weight:500}
+.floating-field:focus-within>span{color:var(--field-focus)}
+.floating-field>input:focus,.floating-field>textarea:focus,.floating-field>select:focus{border-color:var(--field-focus);outline:2px solid color-mix(in srgb,var(--field-focus) 18%,transparent);outline-offset:1px}
+.floating-field>input:user-invalid,.floating-field>textarea:user-invalid,.floating-field>select:user-invalid{border-color:#c77e6b}
+.floating-field>input:disabled,.floating-field>select:disabled{opacity:.6;cursor:not-allowed}
+.floating-field>input::placeholder,.floating-field>textarea::placeholder{font-size:12px;color:var(--field-label);opacity:.75}
+html[dir=rtl] .floating-field>span{transform-origin:top right;font-size:13px}
+html[dir=rtl] .floating-field:is(:focus-within,.field-has-hint,:has(select),:has(input:not(:placeholder-shown)),:has(textarea:not(:placeholder-shown)))>span{font-size:11px}
+html[dir=rtl] .floating-field>input,html[dir=rtl] .floating-field>select,html[dir=rtl] .floating-field>textarea{line-height:1.6;min-height:62px;padding-top:27px}
+select{border-radius:10px;border-color:var(--field-border);background-color:var(--field-surface);padding-inline-end:32px}
+select:hover:not(:disabled){border-color:var(--field-focus)}
+select option{font:inherit;background:var(--field-surface);color:inherit}
+/* Enhance the popup itself where customizable native selects are available. */
+@supports (appearance:base-select){
+ select,select::picker(select){appearance:base-select}
+ select{display:inline-flex;align-items:center;gap:10px}
+ .floating-field>select{display:flex}
+ select::picker-icon{color:var(--field-label);margin-inline-start:auto}
+ select:open::picker-icon{rotate:180deg}
+ select::picker(select){background:var(--field-surface);color:#30432f;border:1px solid var(--field-border);border-radius:12px;padding:6px;margin-block:6px;box-shadow:0 12px 32px #15291c22;max-height:min(320px,60vh);overflow:auto;min-width:anchor-size(width)}
+ select option{display:flex;align-items:center;gap:10px;min-height:40px;padding:10px 12px;border-radius:7px;font-size:13px;line-height:1.5;white-space:normal;overflow-wrap:anywhere;cursor:pointer}
+ select option:hover,select option:focus-visible{background:var(--picker-hover);outline:none}
+ select option:checked{background:var(--picker-selected);font-weight:600}
+ select option:disabled{opacity:.5;cursor:not-allowed}
+ select option::checkmark{color:var(--field-focus);order:1;margin-inline-start:auto}
+ [data-theme="dark"] select::picker(select){color:#e0e9e2;box-shadow:0 12px 32px #0005}
+ .theme-switcher select{padding-inline-end:10px}
+}
+@media screen and (prefers-reduced-motion:no-preference){
+ .floating-field>span{transition:top 140ms ease,font-size 140ms ease,color 140ms ease}
+ select::picker-icon{transition:rotate 160ms ease}
+}
+@media(max-width:720px){.report-range .floating-field{min-width:135px;flex:1}.order-totals .floating-field{display:block}}
