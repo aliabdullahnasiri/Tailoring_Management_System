@@ -1,0 +1,43 @@
+/* Shop identity and workspace navigation share a quiet, consistent rhythm. */
+.sidebar{padding-top:26px}
+.shop-label{display:flex;width:100%;gap:10px;padding:14px 12px;margin:28px 0 26px;text-align:start;border-radius:12px;background:#f0f4ed;border:1px solid #e0e8da;min-height:82px}
+.shop-label:hover:not(:disabled){background:#e9f0e4;border-color:#bdcdb5}
+.shop-emblem{display:grid;place-items:center;flex:0 0 38px;height:42px;border-radius:10px;background:#fff;color:#456b50;box-shadow:0 2px 5px #243b2910}
+.shop-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.shop-copy small{display:block;margin:0;color:#76846c;font-size:10px;font-weight:500}
+.shop-label .shop-copy strong{display:block;max-width:none;white-space:normal;overflow:visible;overflow-wrap:anywhere;color:#344b36;font-size:12px;line-height:1.5;font-weight:600}
+.shop-chevron{flex-shrink:0;color:#7f9473}
+[dir=rtl] .shop-chevron{transform:scaleX(-1)}
+.nav-label{margin-inline:15px;letter-spacing:1.3px}
+.nav-item{min-height:46px;border-radius:9px;gap:12px;margin-block:4px}
+.nav-item.selected{box-shadow:inset 0 0 0 1px #dbe5d4}
+.topbar{height:82px;gap:16px;padding-inline:32px}
+.topbar .breadcrumb{min-width:0;gap:16px;flex:1}
+.topbar-location{display:flex;flex-direction:column;gap:4px;min-width:0}
+.topbar-location small{font-size:10px;line-height:1.2;color:#86907e}
+.topbar .topbar-location strong{font-size:15px;font-weight:600;line-height:1.4;color:#344b36;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .sidebar-toggle,.topbar .mobile-menu{width:38px;min-width:38px;height:38px;min-height:38px;border:1px solid var(--line);border-radius:10px;color:#6c7d65;flex-shrink:0}
+.top-right{gap:14px;flex-shrink:0}
+.top-right .date{display:flex;align-items:center;gap:7px;font-size:11px;white-space:nowrap;color:#84907b}
+.topbar-tools{padding-inline-end:14px;border-inline-end:1px solid var(--line)}
+.theme-switcher select{height:38px;min-height:38px;border-radius:10px;background:#f5f7f2;border-color:var(--line);color:#65785b}
+.user-trigger{padding:5px 8px;gap:10px;border:1px solid transparent;border-radius:11px;min-height:48px;max-width:210px;text-align:start}
+.user-trigger:hover,.user-trigger[aria-expanded="true"]{border-color:var(--line)}
+.user-trigger .owner-avatar{width:36px;height:36px;border-radius:11px}
+.user-trigger-name{font-size:12px;font-weight:600;line-height:1.4;min-width:0}
+.user-trigger-name>bdi{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-trigger-name small{display:block;margin-top:3px;font-size:10px;font-weight:400;color:#87917f}
+[data-theme="dark"] .shop-label{background:#223329;border-color:#364d3b}
+[data-theme="dark"] .shop-label:hover:not(:disabled){background:#2b4030;border-color:#526d48}
+[data-theme="dark"] .shop-emblem{background:#344c39;color:#c2dbb5;box-shadow:none}
+[data-theme="dark"] .shop-label .shop-copy strong,[data-theme="dark"] .topbar .topbar-location strong{color:#e0e9e2}
+[data-theme="dark"] .nav-item.selected{box-shadow:inset 0 0 0 1px #425b39}
+[data-theme="dark"] .theme-switcher select{background:#233128;color:#c4d3bc}
+@media(min-width:721px){
+ .sidebar-mini .shop-label{min-height:58px;margin-block:26px 20px;padding:8px 0;background:transparent;border-color:transparent}
+ .sidebar-mini .shop-copy,.sidebar-mini .shop-chevron{display:none}
+ .sidebar-mini .shop-emblem{flex-basis:40px}
+}
+@media(max-width:1150px){.top-right .date{display:none}.topbar{padding-inline:24px}}
+@media(max-width:720px){.topbar{height:72px;padding-inline:16px;gap:10px}.topbar .breadcrumb{gap:10px}.topbar .sidebar-toggle{display:none}.topbar .mobile-menu{display:inline-flex}.topbar .topbar-location strong{font-size:14px}.top-right{gap:8px}.topbar-tools{padding-inline-end:8px}.user-trigger-name{display:none}.user-trigger{gap:5px;padding-inline:4px}.theme-switcher select{max-width:110px}}
+@media(max-width:400px){.topbar{padding-inline:10px}.topbar .breadcrumb{gap:7px}.topbar .topbar-location strong{font-size:12px}.topbar-tools{border:0;padding:0}.top-right{gap:4px}.theme-switcher select{max-width:96px;font-size:11px;padding-inline-start:29px}.theme-switcher>svg{inset-inline-start:8px;width:15px}.user-trigger>svg{display:none}.user-trigger .owner-avatar{width:32px;height:32px}}
