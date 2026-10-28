@@ -16,6 +16,10 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Orders this week|سفارش‌های این هفته|د دې اوونۍ فرمایشونه
+Last 7 days|۷ روز گذشته|تېرې ۷ ورځې
+Order status|وضعیت سفارش‌ها|د فرمایشونو حالت
+
 Select…|انتخاب کنید…|وټاکئ…
 No matching results|نتیجه‌ای یافت نشد|پایله ونه موندل شوه
 Enter a valid date in YYYY-MM-DD format.|تاریخ معتبر به شکل YYYY-MM-DD وارد کنید.|سمه نېټه د YYYY-MM-DD په بڼه ولیکئ.
