@@ -16,6 +16,28 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Workspace settings|تنظیمات محیط کار|د کاري چاپېریال تنظیمات
+Make your workspace feel like yours.|محیط کار را مطابق سلیقه خود تنظیم کنید.|خپل کاري چاپېریال د خپلې خوښې سره برابر کړئ.
+Close settings|بستن تنظیمات|تنظیمات بند کړئ
+Choose a theme.|یک پوسته انتخاب کنید.|یوه بڼه وټاکئ.
+Sidebar color|رنگ نوار کناری|د اړخیز پټي رنګ
+Choose an accent for your navigation.|رنگ بخش‌های فعال را انتخاب کنید.|د فعالو برخو رنګ وټاکئ.
+Sidebar style|سبک نوار کناری|د اړخیز پټي بڼه
+Choose how your sidebar looks.|ظاهر نوار کناری را انتخاب کنید.|د اړخیز پټي بڼه وټاکئ.
+Match theme|مطابق پوسته|له بڼې سره سم
+Transparent|شفاف|شفاف
+Fixed navbar|نوار بالای ثابت|ثابت پورتنی پټی
+Keep navigation visible while scrolling.|نوار بالا هنگام پیمایش قابل مشاهده بماند.|د پاڼې د خوځولو پر مهال پورتنی پټی ښکاره وساتئ.
+Mini sidebar|نوار کناری کوچک|کوچنی اړخیز پټی
+Use compact, icon-only navigation on desktop.|در نمایشگر بزرگ فقط آیکون‌ها نمایش داده شوند.|په لوی سکرین کې یوازې نښې وښایئ.
+Reset appearance|بازنشانی ظاهر|د بڼې بیا تنظیم
+Preferences are saved in this browser.|تنظیمات در این مرورگر ذخیره می‌شوند.|تنظیمات په دې براوزر کې خوندي کېږي.
+Green|سبز|شین
+Blue|آبی|آبي
+Amber|کهربایی|کهربايي
+Red|سرخ|سور
+Rose|گلابی|ګلابي
+Slate|خاکستری|خړ
 Preparing your workspace…|در حال آماده‌سازی محیط کار شما…|ستاسو کاري چاپېریال چمتو کېږي…
 Table pagination|صفحه‌بندی جدول|د جدول پاڼې
 Rows per page|ردیف در هر صفحه|په هره پاڼه کې کتارونه
