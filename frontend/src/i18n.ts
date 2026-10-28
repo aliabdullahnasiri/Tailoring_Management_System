@@ -16,6 +16,14 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Table pagination|صفحه‌بندی جدول|د جدول پاڼې
+Rows per page|ردیف در هر صفحه|په هره پاڼه کې کتارونه
+Showing {from}–{to} of {total}|نمایش {from}–{to} از {total}|له {total} څخه {from}–{to} ښودل کېږي
+Page {page} of {pages}|صفحه {page} از {pages}|له {pages} څخه {page} پاڼه
+First page|صفحه اول|لومړۍ پاڼه
+Previous page|صفحه قبلی|مخکینۍ پاڼه
+Next page|صفحه بعدی|بله پاڼه
+Last page|صفحه آخر|وروستۍ پاڼه
 Notifications|اعلان‌ها|خبرتیاوې
 Notifications ({count} unread)|اعلان‌ها ({count} خوانده‌نشده)|خبرتیاوې ({count} نالوستې)
 Order reminders|یادآوری سفارش‌ها|د سپارښتنو یادونې
