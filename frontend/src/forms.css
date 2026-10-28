@@ -46,3 +46,9 @@ html[dir=rtl] .report-range{--report-control-height:62px}
 .report-range .field.floating-field{margin:0}
 .report-range .floating-field>input{height:var(--report-control-height)}
 .report-range .inline>.secondary{min-height:var(--report-control-height);border-radius:11px}
+
+/* One search surface, including the icon area, in either theme. */
+.search{background:var(--field-surface);border-color:var(--field-border);border-radius:10px}
+.search input,[data-theme="dark"] .search input{background:transparent;border:0;box-shadow:none}
+.search:focus-within{border-color:var(--field-focus);outline:2px solid color-mix(in srgb,var(--field-focus) 18%,transparent);outline-offset:1px}
+.search input:focus-visible{outline:none}
