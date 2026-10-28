@@ -1,3 +1,4 @@
+import {useAnimatedClose} from './useAnimatedClose';
 import {useEffect,useRef,useState} from 'react';
 import {Settings,Check,X,Sun,Moon,Monitor,CalendarDays} from 'lucide-react';
 import {t,locale,formatDate,useLanguage,setLanguage} from './i18n';
@@ -16,6 +17,7 @@ function Toggle({label,detail,checked,onChange}:{label:string;detail:string;chec
 export function WorkspaceSettings({mini,onMiniChange}:{mini:boolean;onMiniChange:(value:boolean)=>void}){
  const theme=useTheme(),appearance=useAppearance(),lang=useLanguage();
  const [open,setOpen]=useState(false);
+ const settingsExit=useAnimatedClose(()=>setOpen(false));
  const dialog=useRef<HTMLDialogElement>(null);
  useEffect(()=>{
   if(!open)return;
@@ -25,9 +27,9 @@ export function WorkspaceSettings({mini,onMiniChange}:{mini:boolean;onMiniChange
  },[open]);
  const colors=[['green','Green'],['blue','Blue'],['amber','Amber'],['red','Red'],['rose','Rose'],['slate','Slate']] as const;
  return <>
-  <button type="button" className="floating-settings" aria-label={t('Workspace settings')} title={t('Workspace settings')} aria-haspopup="dialog" onClick={()=>setOpen(true)}><Settings size={23}/></button>
-  <dialog ref={dialog} className="workspace-settings" aria-labelledby="workspace-settings-title" onClose={()=>setOpen(false)} onClick={event=>{if(event.target===event.currentTarget){const bounds=event.currentTarget.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)setOpen(false)}}}>
-   <header><div><h2 id="workspace-settings-title">{t('Workspace settings')}</h2><p>{t('Make your workspace feel like yours.')}</p></div><button type="button" className="icon" autoFocus aria-label={t('Close settings')} onClick={()=>setOpen(false)}><X size={21}/></button></header>
+  <button type="button" className="floating-settings" aria-label={t('Workspace settings')} title={t('Workspace settings')} aria-haspopup="dialog" onClick={()=>{settingsExit.cancel();setOpen(true)}}><Settings size={23}/></button>
+  <dialog ref={dialog} className={`workspace-settings${settingsExit.closing?' is-closing':''}`} aria-labelledby="workspace-settings-title" onCancel={event=>{event.preventDefault();settingsExit.close()}} onClose={()=>{settingsExit.cancel();setOpen(false)}} onClick={event=>{if(event.target===event.currentTarget){const bounds=event.currentTarget.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right||event.clientY<bounds.top||event.clientY>bounds.bottom)settingsExit.close()}}}>
+   <header><div><h2 id="workspace-settings-title">{t('Workspace settings')}</h2><p>{t('Make your workspace feel like yours.')}</p></div><button type="button" className="icon" autoFocus aria-label={t('Close settings')} onClick={()=>settingsExit.close()}><X size={21}/></button></header>
    <div className="workspace-settings-body">
     <section><h3>{t('Appearance')}</h3><p>{t('Choose a theme.')}</p><div className="workspace-choices" role="group" aria-label={t('Theme')}>{([['light','Light',Sun],['dark','Dark',Moon],['system','System',Monitor]] as const).map(([value,label,Icon])=><button type="button" key={value} aria-pressed={theme===value} onClick={()=>setTheme(value)}><Icon size={17}/>{t(label)}</button>)}</div></section>
     <section><h3>{t('Language')}</h3><div className="workspace-choices" role="group" aria-label={t('Language')}>{([['en','English'],['fa','فارسی'],['ps','پښتو']] as const).map(([value,label])=><button type="button" lang={value} key={value} aria-pressed={lang===value} onClick={()=>setLanguage(value)}>{label}</button>)}</div></section>
