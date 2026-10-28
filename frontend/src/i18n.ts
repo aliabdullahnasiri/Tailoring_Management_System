@@ -16,6 +16,14 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Notifications|اعلان‌ها|خبرتیاوې
+Notifications ({count} unread)|اعلان‌ها ({count} خوانده‌نشده)|خبرتیاوې ({count} نالوستې)
+Order reminders|یادآوری سفارش‌ها|د سپارښتنو یادونې
+Close notifications|بستن اعلان‌ها|خبرتیاوې بندې کړئ
+Mark all as read|علامت‌گذاری همه به‌عنوان خوانده‌شده|ټولې د لوستل شوو په توګه نښه کړئ
+No notifications|اعلانی وجود ندارد|خبرتیا نشته
+Your orders are on track.|سفارش‌های شما طبق برنامه پیش می‌روند.|ستاسو سپارښتنې له پلان سره سم روانې دي.
+Unread|خوانده‌نشده|نالوستې
 Tailor Studio|مدیریت خیاطی|د خیاطۍ مدیریت
 Your shop|دکان شما|ستاسو دوکان
 Shop settings|تنظیمات دکان|د دوکان تنظیمات
