@@ -68,3 +68,13 @@ html[lang=ps] .brand-title,html[lang=ps] .auth-brand{font-family:'Noto Sans Arab
 .user-trigger:hover,.user-trigger[aria-expanded="true"]{border-color:#9db28e}
 [data-theme="dark"] .user-trigger{border-color:#4b6050;background:#233128}
 [data-theme="dark"] .user-trigger:hover,[data-theme="dark"] .user-trigger[aria-expanded="true"]{border-color:#809b70}
+
+.theme-buttons{display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--line);border-radius:11px;background:#f0f4ec}
+.theme-buttons button{display:grid;place-items:center;width:32px;height:32px;padding:0;border-radius:7px;color:#7b8b71}
+.theme-buttons button:hover{background:#e5eddf;color:#3e633d}
+.theme-buttons button[aria-pressed="true"]{background:#fff;color:#365f3c;box-shadow:0 1px 4px #243b2920}
+[data-theme="dark"] .theme-buttons{background:#152019;border-color:#425648}
+[data-theme="dark"] .theme-buttons button{color:#a6b79c}
+[data-theme="dark"] .theme-buttons button:hover{background:#293c2d;color:#d2e2c8}
+[data-theme="dark"] .theme-buttons button[aria-pressed="true"]{background:#3a513c;color:#e1efd8;box-shadow:0 1px 4px #0003}
+@media(max-width:400px){.theme-buttons{padding:2px;gap:1px}.theme-buttons button{width:28px;height:34px}}

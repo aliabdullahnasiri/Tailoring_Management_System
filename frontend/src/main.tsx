@@ -142,8 +142,10 @@ function PaymentForm({data,orderId,busy,save}:{data:State;orderId?:string;busy:b
 function ReverseForm({busy,save}:{busy:boolean;save:(reason:string)=>void}){return <form onInvalid={e=>{const field=e.target as HTMLInputElement;field.setCustomValidity(t("Please check this field and enter a valid value."))}} onInput={e=>(e.target as HTMLInputElement).setCustomValidity?.('')} onSubmit={e=>{e.preventDefault();save(String(new FormData(e.currentTarget).get('reason')))}}><div className="note warning">{t("This reverses the full payment and increases the outstanding balance. The original payment remains in the history. For a partial correction, reverse this payment and record the correct amount.")}</div><Field label={t("Reason for reversal *")}><textarea name="reason" required minLength={3} maxLength={500} placeholder={t("Explain the correction…")}/></Field><Submit busy={busy} label={t("Reverse payment")}/></form>}
 function ThemeSwitcher(){
  const theme=useTheme();
- const Icon=theme==='dark'?Moon:theme==='light'?Sun:Monitor;
- return <label className="theme-switcher"><Icon size={17} aria-hidden="true"/><select aria-label={t('Theme')} value={theme} onChange={event=>setTheme(event.target.value)}><option value="system">{t('System')}</option><option value="light">{t('Light')}</option><option value="dark">{t('Dark')}</option></select></label>
+ const options=[['light','Light',Sun],['dark','Dark',Moon],['system','System',Monitor]] as const;
+ return <div className="theme-buttons" role="group" aria-label={t('Theme')}>
+  {options.map(([value,label,Icon])=><button key={value} type="button" aria-label={t(label)} title={t(label)} aria-pressed={theme===value} onClick={()=>setTheme(value)}><Icon size={17} aria-hidden="true"/></button>)}
+ </div>;
 }
 function AppearanceSettings(){
  const theme=useTheme();
