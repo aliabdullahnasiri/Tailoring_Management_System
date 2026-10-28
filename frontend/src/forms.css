@@ -52,3 +52,8 @@ html[dir=rtl] .report-range{--report-control-height:62px}
 .search input,[data-theme="dark"] .search input{background:transparent;border:0;box-shadow:none}
 .search:focus-within{border-color:var(--field-focus);outline:2px solid color-mix(in srgb,var(--field-focus) 18%,transparent);outline-offset:1px}
 .search input:focus-visible{outline:none}
+
+/* Keep numeric fields clean while retaining number validation and arrow-key input. */
+.floating-field>input[type=number]{appearance:textfield;-moz-appearance:textfield}
+.floating-field>input[type=number]::-webkit-inner-spin-button,.floating-field>input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.add-order-item{margin-block:4px 20px;min-height:42px}
