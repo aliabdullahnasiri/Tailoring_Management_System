@@ -165,19 +165,17 @@ html[dir=rtl] .floating-field .app-date input{padding-top:24px;padding-bottom:8p
 .status-chart li button{width:100%;display:flex;align-items:center;gap:8px;padding:10px 8px;border-radius:8px;font-size:12px;text-align:start}
 @media(prefers-reduced-motion:reduce){.weekly-column,.donut-segment{transition:none}}
 
-/* Give chart labels, legends and detail panels room to breathe. */
-.dashboard-charts{gap:24px;margin-block:8px 28px}
-.dashboard-charts>.card{padding:24px}
-.dashboard-charts .card-heading{margin-bottom:24px}
-.dashboard-charts .weekly-chart{padding:4px 4px 8px;gap:12px}
-.dashboard-charts .weekly-track{margin-block:12px}
-.dashboard-charts .status-chart{gap:28px;padding-block:8px}
-.dashboard-charts .status-chart li{margin-block:6px}
-.dashboard-charts .chart-details{margin-top:22px;padding:12px 14px;gap:6px}
+/* Compact chart spacing with room at the sides and bottom. */
+.dashboard-charts{gap:18px;margin:0 6px 18px}
+.dashboard-charts>.card{padding:16px}
+.dashboard-charts .card-heading{margin-bottom:14px}
+.dashboard-charts .weekly-chart{padding:0 4px 6px;gap:8px}
+.dashboard-charts .status-chart{gap:18px;padding:0 4px 6px}
+.dashboard-charts .chart-details{margin-top:12px;padding:10px 12px}
+.chart-title{display:flex;align-items:center;gap:8px}
+.chart-title svg{color:var(--field-focus);flex-shrink:0}
 @media(max-width:720px){
- .dashboard-charts{gap:18px;margin-block:4px 22px}
- .dashboard-charts>.card{padding:18px}
+ .dashboard-charts{gap:14px;margin:0 4px 14px}
+ .dashboard-charts>.card{padding:14px}
  .dashboard-charts .weekly-chart{gap:4px;padding-inline:0}
- .dashboard-charts .status-chart{gap:18px}
- .dashboard-charts .chart-details{margin-top:18px}
 }
