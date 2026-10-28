@@ -1,8 +1,8 @@
 /* Shop identity and workspace navigation share a quiet, consistent rhythm. */
 .sidebar{padding-top:26px}
-.shop-label{display:flex;width:100%;gap:10px;padding:14px 12px;margin:28px 0 26px;text-align:start;border-radius:12px;background:#f0f4ed;border:1px solid #e0e8da;min-height:82px}
+.shop-label{display:flex;width:100%;gap:8px;padding:9px 10px;margin:20px 0;text-align:start;border-radius:10px;background:#f0f4ed;border:1px solid #e0e8da;min-height:60px}
 .shop-label:hover:not(:disabled){background:#e9f0e4;border-color:#bdcdb5}
-.shop-emblem{display:grid;place-items:center;flex:0 0 38px;height:42px;border-radius:10px;background:#fff;color:#456b50;box-shadow:0 2px 5px #243b2910}
+.shop-emblem{display:grid;place-items:center;flex:0 0 32px;height:34px;border-radius:8px;background:#fff;color:#456b50;box-shadow:0 2px 5px #243b2910}
 .shop-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
 .shop-copy small{display:block;margin:0;color:#76846c;font-size:10px;font-weight:500}
 .shop-label .shop-copy strong{display:block;max-width:none;white-space:normal;overflow:visible;overflow-wrap:anywhere;color:#344b36;font-size:12px;line-height:1.5;font-weight:600}
@@ -78,3 +78,5 @@ html[lang=ps] .brand-title,html[lang=ps] .auth-brand{font-family:'Noto Sans Arab
 [data-theme="dark"] .theme-buttons button:hover{background:#293c2d;color:#d2e2c8}
 [data-theme="dark"] .theme-buttons button[aria-pressed="true"]{background:#3a513c;color:#e1efd8;box-shadow:0 1px 4px #0003}
 @media(max-width:400px){.theme-buttons{padding:2px;gap:1px}.theme-buttons button{width:28px;height:34px}}
+
+.shop-emblem svg{width:20px;height:20px}
