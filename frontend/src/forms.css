@@ -38,3 +38,11 @@ select option{font:inherit;background:var(--field-surface);color:inherit}
  select::picker-icon{transition:rotate 160ms ease}
 }
 @media(max-width:720px){.report-range .floating-field{min-width:135px;flex:1}.order-totals .floating-field{display:block}}
+
+/* Keep report dates and presets aligned despite floating-field margins. */
+.report-range{--report-control-height:58px}
+html[dir=rtl] .report-range{--report-control-height:62px}
+.report-range .inline{align-items:center;gap:12px}
+.report-range .field.floating-field{margin:0}
+.report-range .floating-field>input{height:var(--report-control-height)}
+.report-range .inline>.secondary{min-height:var(--report-control-height);border-radius:11px}
