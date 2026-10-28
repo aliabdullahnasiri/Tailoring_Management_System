@@ -1,0 +1,25 @@
+.startup-screen{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:32px 24px;background:radial-gradient(ellipse at 50% 30%,#e7efdf 0,transparent 60%),#f6f7f5}
+.startup-content{width:min(420px,100%);margin:0;padding:0;text-align:center}
+.startup-mark{width:88px;height:88px;display:grid;place-items:center;margin:0 auto 28px;border-radius:26px;background:linear-gradient(145deg,#335c43,#244b36);color:#e6f0d9;box-shadow:0 12px 36px #36583220,inset 0 1px 0 #ffffff20}
+.startup-content h1{font-family:Georgia,serif;font-size:32px;letter-spacing:-.6px;line-height:1.5;color:#2a4432}
+.startup-tagline{margin-top:10px;font-size:13px;color:#75856d}
+.startup-progress{margin:38px auto 0;width:min(260px,100%)}
+.startup-track{height:4px;background:#dce5d6;border-radius:4px;overflow:hidden}
+.startup-track span{display:block;width:40%;height:100%;border-radius:4px;background:#64875a}
+.startup-progress p{font-size:12px;margin-top:16px;color:#718368}
+.startup-note{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:56px;font-size:11px;color:#86967e}
+.startup-error{display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:30px;color:#b36550}
+.startup-error p{color:inherit;overflow-wrap:anywhere}
+[data-theme=dark] .startup-screen{background:radial-gradient(ellipse at 50% 30%,#223929 0,transparent 65%),#111915}
+[data-theme=dark] .startup-content h1{color:#e1ebdc}
+[data-theme=dark] .startup-mark{background:linear-gradient(145deg,#3a5f40,#273e2c);color:#c8e1b5;box-shadow:0 12px 36px #0003,inset 0 1px 0 #ffffff10}
+[data-theme=dark] .startup-track{background:#304635}
+[data-theme=dark] .startup-track span{background:#a1c28a}
+[data-theme=dark] .startup-progress p,[data-theme=dark] .startup-tagline,[data-theme=dark] .startup-note{color:#a4b69b}
+html[lang=fa] .startup-content h1{font-family:Vazirmatn,Tahoma,sans-serif}
+html[lang=ps] .startup-content h1{font-family:'Noto Sans Arabic',Tahoma,sans-serif}
+html[dir=rtl] .startup-content h1{font-size:30px;letter-spacing:0}
+@keyframes startup-loading{from{translate:-110% 0}to{translate:360% 0}}
+@media screen and (prefers-reduced-motion:no-preference){.startup-track span{animation:startup-loading 1.3s ease-in-out infinite}[dir=rtl] .startup-track span{animation-direction:reverse}}
+@media(prefers-reduced-motion:reduce){.startup-track span{width:100%;opacity:.65}}
+@media print{.startup-screen{display:none}}

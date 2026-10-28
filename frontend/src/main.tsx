@@ -1,6 +1,7 @@
 import {Paginated} from './Paginated';
 import {Notifications} from './Notifications';
-import {PageSkeleton,AccountSkeleton} from './Skeleton';
+import {PageSkeleton} from './Skeleton';
+import {StartupScreen} from './StartupScreen';
 import {setTheme,useTheme} from './theme';
 import {t,language,setLanguage,useLanguage,formatNumber,formatDate,formatTimestamp} from './i18n';
 
@@ -67,11 +68,12 @@ function AccountScreen({status,onDone}:{status:AuthStatus;onDone:()=>Promise<voi
  return <div className="auth-page"><section className="auth-story"><div className="auth-brand"><Scissors size={28}/>{t('Tailor Studio')}</div><div><span className="eyebrow">{t('YOUR CRAFT. YOUR WORKSPACE.')}</span><h1>{t('Every great fit')}<br/>{t('starts with trust.')}</h1><p>{t('A calm space for your customers, measurements, orders and the details that make your work yours.')}</p><div className="auth-features"><span><Ruler size={18}/>{t('Every measurement remembered')}</span><span><ShoppingBag size={18}/>{t('Every order on track')}</span><span><Wallet size={18}/>{t('Every payment accounted for')}</span></div></div><small>{t('Tailoring management, made personal.')}</small></section><section className="auth-panel"><LanguagePicker/><div className="auth-box"><div className="auth-lock"><ShieldCheck size={30}/></div><span className="eyebrow">{t('PRIVATE SHOP WORKSPACE')}</span><h2>{t(signup?'Create your owner account':'Welcome back.')}</h2><p>{t(signup?'Create the only account for this shop. Signup closes automatically after this step.':'Sign in with your username and password.')}</p>{error&&<div className="error" role="alert">{t(error)}</div>}<form className="account-form" onSubmit={async e=>{e.preventDefault();if(busy)return;const f=new FormData(e.currentTarget);if(signup&&f.get('password')!==f.get('confirm')){setError('Passwords do not match.');return}setBusy(true);setError('');try{await api(signup?'/auth/signup':'/auth/signin',{username:f.get('username'),password:f.get('password'),setup_key:f.get('setup_key')||''});await onDone()}catch(err){setError((err as Error).message);if((err as Error).message.includes('Signup is closed'))await onDone()}finally{setBusy(false)}}}><Field label={t('Username')}><input name="username" autoComplete="username" required minLength={3} maxLength={80} dir="ltr"/></Field><Field label={t('Password')}><input name="password" type="password" autoComplete={signup?'new-password':'current-password'} required minLength={signup?10:1} maxLength={128} dir="ltr"/></Field>{signup&&<Field label={t('Confirm password')}><input name="confirm" type="password" autoComplete="new-password" required minLength={10} maxLength={128} dir="ltr"/></Field>}{signup&&status.setup_key_required&&<Field label={t('Server setup key')}><input name="setup_key" type="password" autoComplete="off" required dir="ltr"/></Field>}<button className="primary auth-continue" type="submit" disabled={busy}>{t(busy?'Please wait…':signup?'Sign up':'Sign in')}<ArrowRight size={18}/></button></form><div className="auth-note"><ShieldCheck size={17}/><span>{t(signup?'Use a password with at least 10 characters.':'Only the registered owner can access this shop.')}</span></div></div></section></div>
 }
 function AuthRoot(){
+ const [startupReady,setStartupReady]=useState(false);
+ useEffect(()=>{const timer=setTimeout(()=>setStartupReady(true),900);return()=>clearTimeout(timer)},[]);
  useLanguage();const[status,setStatus]=useState<AuthStatus|null>(null),[error,setError]=useState('');
  const refresh=async()=>{setError('');try{setStatus(await refreshIdentity());setError('')}catch(e){setError((e as Error).message)}};
  useEffect(()=>{refresh();const handler=()=>{setStatus(null);refresh()};window.addEventListener('tms-auth-change',handler);const timer=setInterval(refresh,60000);return()=>{clearInterval(timer);window.removeEventListener('tms-auth-change',handler)}},[]);
- if(!status&&!error)return <AccountSkeleton/>;
- if(!status)return <div className="loading"><Scissors size={40}/><p>{t(error||'Loading…')}</p>{error&&<button onClick={refresh}>{t('Try again')}</button>}</div>;
+ if(!status||!startupReady)return <StartupScreen message="Preparing your workspace…" error={error} onRetry={refresh}/>;
  return status.authenticated?<App username={status.username||''}/>:<AccountScreen status={status} onDone={refresh}/>;
 }
 function App({username}:{username:string}){
@@ -79,7 +81,7 @@ function App({username}:{username:string}){
  useEffect(()=>{try{localStorage.setItem('thread-ledger-sidebar-mini',String(sidebarMini))}catch{/* Keep the toggle usable without storage. */}},[sidebarMini]);
  const toggleSidebar=()=>setSidebarMini(previous=>!previous);
  const [data,setData]=useState<State|null>(null),[page,setPage]=useState('Dashboard'),[query,setQuery]=useState(''),[filter,setFilter]=useState('All orders'),[dueFilter,setDueFilter]=useState(''),[modal,setModal]=useState<{type:string;id?:string;customer?:string}|null>(null),[error,setError]=useState(''),[toast,setToast]=useState(''),[busy,setBusy]=useState(false),[mobile,setMobile]=useState(false),[customerTab,setCustomerTab]=useState('Orders'),[reportFrom,setReportFrom]=useState(today().slice(0,7)+'-01'),[reportTo,setReportTo]=useState(today()),[receipt,setReceipt]=useState<{order:Order;payment?:Payment}|null>(null);
- const [pageLoading,setPageLoading]=useState(true);
+ const [pageLoading,setPageLoading]=useState(false);
  useEffect(()=>{const timer=setTimeout(()=>setPageLoading(false),SKELETON_MIN_MS);return()=>clearTimeout(timer)},[page]);
  const refresh=async()=>{const d=await api<State>('/state');try{if(!localStorage.getItem('thread-ledger-language'))setLanguage(d.settings.language)}catch{/* Browser storage is optional. */}setData(d)};
  useEffect(()=>{refresh().catch(e=>setError(e.message))},[]);
@@ -90,6 +92,7 @@ function App({username}:{username:string}){
  const navigate=(p:string)=>{if(p!==page)setPageLoading(true);setPage(p);setQuery('');setMobile(false);setFilter('All orders');setDueFilter('')};
  const open=(type:string,id?:string,customer?:string)=>{setError('');setModal({type,id,customer})};
  const run=async(action:()=>Promise<unknown>,message:string,close=true)=>{if(busy)return;setBusy(true);setError('');try{await action();await refresh();if(close)setModal(null);setToast(message)}catch(e){setError((e as Error).message)}finally{setBusy(false)}};
+ if(!data)return <StartupScreen message="Opening your shop workspace…" error={error} onRetry={()=>{setError('');void refresh().catch(e=>setError(e.message))}}/>;
  const d:State=data||{customers:[],profiles:[],orders:[],items:[],payments:[],history:[],fields:{},settings:{name:t('Loading…'),phone:'',address:'',language:language(),receipt_width:'a4'}};
  const customer=(id:string)=>d.customers.find(c=>c.id===id)!;
  const overdue=(o:Order)=>o.status!=='Delivered'&&o.due<today();

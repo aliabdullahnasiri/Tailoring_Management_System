@@ -16,6 +16,7 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Preparing your workspace…|در حال آماده‌سازی محیط کار شما…|ستاسو کاري چاپېریال چمتو کېږي…
 Table pagination|صفحه‌بندی جدول|د جدول پاڼې
 Rows per page|ردیف در هر صفحه|په هره پاڼه کې کتارونه
 Showing {from}–{to} of {total}|نمایش {from}–{to} از {total}|له {total} څخه {from}–{to} ښودل کېږي
