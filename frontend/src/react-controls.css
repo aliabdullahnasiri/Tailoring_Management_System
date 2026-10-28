@@ -1,0 +1,53 @@
+/* React controls share the same surfaces and dimensions as text fields. */
+.app-select{min-width:100px;position:relative;font-size:12px;color:var(--field-label)}
+.rs__control{display:flex;min-height:42px;border:1px solid var(--field-border);border-radius:10px;background:var(--field-surface);cursor:pointer}
+.rs__control--is-focused{border-color:var(--field-focus);box-shadow:0 0 0 2px color-mix(in srgb,var(--field-focus) 15%,transparent)}
+.rs__control--is-disabled{opacity:.55}
+.rs__value-container{padding:10px 12px;min-width:0;flex:1}
+.rs__single-value{color:var(--control-text,#30432f);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rs__placeholder{color:var(--field-label)}
+.rs__indicators{display:flex;align-items:center;align-self:stretch;padding-inline:8px;flex-shrink:0}
+.rs__dropdown-indicator{display:flex;align-items:center;justify-content:center;width:22px;height:22px;color:var(--field-label)}
+.rs__indicator-separator{display:none}
+.rs__input-container{margin:0;padding:0;color:var(--control-text,#30432f)}
+.app-select input{background:transparent!important;box-shadow:none!important;border:0!important;outline:none!important;min-height:0!important;padding:0!important;margin:0!important;color:inherit!important;font:inherit!important}
+.app-select .rs__input-container input{width:100%!important}
+.rs__menu{background:var(--field-surface);border:1px solid var(--field-border);border-radius:11px;box-shadow:0 10px 32px #10251930;padding:5px;margin-block:5px;overflow:hidden;color:var(--control-text,#30432f);font-size:13px;z-index:100}
+.rs__menu-list{max-height:240px;overscroll-behavior:contain}
+.rs__option{padding:11px 12px;border-radius:7px;cursor:pointer;line-height:1.6;overflow-wrap:anywhere}
+.rs__option--is-focused{background:var(--picker-hover)}
+.rs__option--is-selected{background:var(--picker-selected);color:var(--field-focus);font-weight:600}
+.rs__option--is-disabled{opacity:.45;cursor:not-allowed}
+.rs__menu-notice{padding:18px;text-align:center}
+.field.floating-field.field-custom>span{top:7px;font-size:10px;font-weight:500;z-index:1;inset-inline-end:40px}
+.floating-field .app-select{width:100%}.floating-field .rs__control{min-height:58px}
+.floating-field .rs__value-container{padding:25px 14px 9px;font-size:13px}
+html[dir=rtl] .floating-field.field-custom>span{font-size:11px}
+html[dir=rtl] .floating-field .rs__control{min-height:62px}
+html[dir=rtl] .floating-field .rs__value-container{padding-top:27px}
+.app-date{position:relative;min-width:140px}
+.app-date .react-datepicker-wrapper,.app-date .react-datepicker__input-container{display:block;width:100%}
+.app-date input{width:100%;min-height:42px;padding-inline-end:38px;border-radius:10px;background:var(--field-surface);border:1px solid var(--field-border)}
+.floating-field .app-date input{height:58px;padding:25px 38px 9px 14px;font-size:13px}
+html[dir=rtl] .floating-field .app-date input{height:62px;padding-top:27px}
+.date-control-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--field-label)}
+.react-datepicker-popper{z-index:110!important}
+.app-calendar.react-datepicker{font:inherit;font-size:12px;background:var(--field-surface);color:var(--control-text,#30432f);border:1px solid var(--field-border);border-radius:12px;box-shadow:0 12px 35px #10251930;overflow:hidden}
+.app-calendar .react-datepicker__header{background:var(--picker-hover);border-color:var(--field-border);padding-top:14px}
+.app-calendar .react-datepicker__current-month,.app-calendar .react-datepicker__day-name,.app-calendar .react-datepicker__day{color:var(--control-text,#30432f)}
+.app-calendar .react-datepicker__day{border-radius:7px;line-height:2rem;width:2rem}
+.app-calendar .react-datepicker__day-name{width:2rem;line-height:2rem}
+.app-calendar .react-datepicker__day:hover,.app-calendar .react-datepicker__day--keyboard-selected{background:var(--picker-hover)}
+.app-calendar .react-datepicker__day--selected{background:#326e54!important;color:#fff!important}
+.app-calendar .react-datepicker__day--disabled{color:var(--field-label);opacity:.35}
+.app-calendar .react-datepicker__navigation{top:11px}
+[data-theme=dark]{--control-text:#e0e9e2}
+.pagination-size .app-select{min-width:70px}.pagination-size .rs__control{min-height:36px}.pagination-size .rs__value-container{padding:6px 9px}
+.language-picker .app-select{min-width:120px}.language-picker .rs__control{min-height:38px}
+.list-toolbar .app-select{min-width:150px}.report-range .field.floating-field .app-date input{height:var(--report-control-height)}
+/* Make the account control the same height, radius and border as its peers. */
+.topbar .user-trigger{height:40px;min-height:40px;padding:3px 8px;border-radius:11px;background:var(--field-surface);border:1px solid var(--field-border);gap:8px}
+.topbar .user-trigger .owner-avatar{width:30px;height:30px;border-radius:8px;background:var(--picker-hover);color:var(--field-focus)}
+.topbar .user-trigger-name{line-height:1.2;font-size:11px}.topbar .user-trigger-name small{font-size:9px;margin-top:3px}
+.topbar .user-trigger:hover,.topbar .user-trigger[aria-expanded=true]{background:var(--picker-hover);border-color:var(--field-focus)}
+@media(max-width:720px){.list-toolbar .app-date{max-width:100%}.floating-field .app-date{min-width:0}.topbar .user-trigger{padding-inline:4px}}

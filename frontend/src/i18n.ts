@@ -16,6 +16,11 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Select…|انتخاب کنید…|وټاکئ…
+No matching results|نتیجه‌ای یافت نشد|پایله ونه موندل شوه
+Enter a valid date in YYYY-MM-DD format.|تاریخ معتبر به شکل YYYY-MM-DD وارد کنید.|سمه نېټه د YYYY-MM-DD په بڼه ولیکئ.
+Previous month|ماه قبل|تېره میاشت
+Next month|ماه بعد|راتلونکې میاشت
 Workspace settings|تنظیمات محیط کار|د کاري چاپېریال تنظیمات
 Make your workspace feel like yours.|محیط کار را مطابق سلیقه خود تنظیم کنید.|خپل کاري چاپېریال د خپلې خوښې سره برابر کړئ.
 Close settings|بستن تنظیمات|تنظیمات بند کړئ
