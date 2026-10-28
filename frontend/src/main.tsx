@@ -11,6 +11,7 @@ import './dark.css';
 import './navigation.css';
 import './motion.css';
 import './forms.css';
+import './scrollbars.css';
 const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
 const money=(n:number)=>formatNumber(n)+' ؋';
 const localDay=(s:string)=>{const d=new Date(s);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};

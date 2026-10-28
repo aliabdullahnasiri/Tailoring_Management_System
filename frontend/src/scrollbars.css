@@ -1,0 +1,34 @@
+/* Native scrolling with one palette across pages and nested scroll areas. */
+:root{--scroll-thumb:#9aa994;--scroll-hover:#6f8969;--scroll-active:#456b50;--scroll-track:transparent}
+[data-theme="dark"]{--scroll-thumb:#506958;--scroll-hover:#799880;--scroll-active:#a5c597}
+@media screen {
+ *{scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) var(--scroll-track)}
+ html{scrollbar-gutter:stable}
+ .sidebar{overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain}
+ .sidebar>*{flex-shrink:0}
+ .modal,.table-wrap,textarea{overscroll-behavior:contain}
+ .user-panel{max-height:calc(100vh - 100px);max-height:calc(100dvh - 100px);overflow-y:auto;overscroll-behavior-y:contain}
+ /* Chromium/WebKit offer rounded thumbs and distinct hover/drag feedback. */
+ @supports selector(::-webkit-scrollbar){
+  *{scrollbar-width:auto;scrollbar-color:auto}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:var(--scroll-track);border-radius:20px}
+  ::-webkit-scrollbar-thumb{min-height:36px;min-width:36px;background:var(--scroll-thumb);border:3px solid transparent;background-clip:padding-box;border-radius:20px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--scroll-hover);border:2px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:active{background:var(--scroll-active);border:2px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-corner{background:transparent}
+  ::-webkit-scrollbar-button{display:none}
+ }
+ @supports (appearance:base-select){
+  select::picker(select){scrollbar-width:thin;scrollbar-color:var(--scroll-thumb) var(--scroll-track);overscroll-behavior:contain}
+ }
+}
+/* Let OS accessibility settings provide the high-contrast scroll controls. */
+@media (forced-colors:active){
+ *{scrollbar-width:auto!important;scrollbar-color:auto!important}
+ ::-webkit-scrollbar{width:14px;height:14px}
+ ::-webkit-scrollbar-thumb{background:ButtonText;border:2px solid Canvas}
+ ::-webkit-scrollbar-track{background:Canvas}
+}
+@media (pointer:coarse){::-webkit-scrollbar{width:12px;height:12px}}
+@media print{html{scrollbar-gutter:auto}}
