@@ -19,7 +19,6 @@ const rows=`
 Orders this week|سفارش‌های این هفته|د دې اوونۍ فرمایشونه
 Last 7 days|۷ روز گذشته|تېرې ۷ ورځې
 Order status|وضعیت سفارش‌ها|د فرمایشونو حالت
-
 Select…|انتخاب کنید…|وټاکئ…
 No matching results|نتیجه‌ای یافت نشد|پایله ونه موندل شوه
 Enter a valid date in YYYY-MM-DD format.|تاریخ معتبر به شکل YYYY-MM-DD وارد کنید.|سمه نېټه د YYYY-MM-DD په بڼه ولیکئ.
@@ -446,7 +445,7 @@ A valid server setup key is required for first signup.|برای اولین ثب�
 Too many attempts. Try again in 15 minutes.|تلاش‌های بیش از حد. ۱۵ دقیقه بعد دوباره تلاش کنید.|هڅې ډېرې شوې. ۱۵ دقیقې وروسته بیا هڅه وکړئ.
 Incorrect username or password.|نام کاربری یا رمز عبور نادرست است.|کارن نوم یا پټنوم ناسم دی.
 `;
-for(const line of rows.trim().split('\n')){const [key,fa,ps]=line.split('|');if(!key||!fa||!ps)throw new Error('Incomplete translation: '+key);translations[key]=[fa,ps]}
+for(const line of rows.trim().split('\n')){if(!line.trim())continue;const [key,fa,ps]=line.split('|');if(!key||!fa||!ps)throw new Error('Incomplete translation: '+key);translations[key]=[fa,ps]}
 export function t(value:string|undefined,params:Record<string,string|number>={},lang:Language=current):string{
  if(value===undefined)return '';const key=value.trim().replace(/\s+/g,' ');const translated=lang==='en'?key:translations[key]?.[lang==='fa'?0:1]??key;
  return value.slice(0,value.length-value.trimStart().length)+translated.replace(/\{(\w+)\}/g,(_,k)=>String(params[k]??`{${k}}`))+value.slice(value.trimEnd().length);
