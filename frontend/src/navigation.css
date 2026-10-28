@@ -41,3 +41,17 @@
 @media(max-width:1150px){.top-right .date{display:none}.topbar{padding-inline:24px}}
 @media(max-width:720px){.topbar{height:72px;padding-inline:16px;gap:10px}.topbar .breadcrumb{gap:10px}.topbar .sidebar-toggle{display:none}.topbar .mobile-menu{display:inline-flex}.topbar .topbar-location strong{font-size:14px}.top-right{gap:8px}.topbar-tools{padding-inline-end:8px}.user-trigger-name{display:none}.user-trigger{gap:5px;padding-inline:4px}.theme-switcher select{max-width:110px}}
 @media(max-width:400px){.topbar{padding-inline:10px}.topbar .breadcrumb{gap:7px}.topbar .topbar-location strong{font-size:12px}.topbar-tools{border:0;padding:0}.top-right{gap:4px}.theme-switcher select{max-width:96px;font-size:11px;padding-inline-start:29px}.theme-switcher>svg{inset-inline-start:8px;width:15px}.user-trigger>svg{display:none}.user-trigger .owner-avatar{width:32px;height:32px}}
+
+/* A compact wordmark that stays on one line in LTR and RTL sidebars. */
+.sidebar .brand{direction:ltr;gap:10px;padding:0 2px;min-height:48px;letter-spacing:0}
+.sidebar .brand-mark{width:38px;height:42px;flex:0 0 38px;border-radius:12px;background:linear-gradient(145deg,#e7efe0,#dce8d3);color:#456b3d;box-shadow:inset 0 0 0 1px #54704b12}
+.sidebar .brand-mark svg{width:23px;height:23px}
+.sidebar .brand-copy{min-width:0;flex:1}
+.sidebar .brand-title{display:block;white-space:nowrap;font-family:Georgia,'Times New Roman',serif;font-size:17px;font-weight:500;line-height:1.2;letter-spacing:-.45px}
+.sidebar .brand-copy small{margin-top:7px;font-size:8px;line-height:1.5;letter-spacing:1.1px;color:#7d8d73}
+html[dir=rtl] .sidebar .brand-copy small{font-family:inherit;font-size:11px;letter-spacing:0;text-align:start;line-height:1.6}
+html[lang=fa] .sidebar .brand-copy small{font-family:Vazirmatn,Tahoma,sans-serif}
+html[lang=ps] .sidebar .brand-copy small{font-family:'Noto Sans Arabic',Tahoma,sans-serif}
+[data-theme="dark"] .sidebar .brand-mark{background:linear-gradient(145deg,#334b35,#253b2a);color:#bed6aa;box-shadow:inset 0 0 0 1px #9cbd841a}
+[data-theme="dark"] .sidebar .brand-copy small{color:#a8b99c}
+@media(min-width:721px){.sidebar-mini .brand{padding:0;gap:0}}
