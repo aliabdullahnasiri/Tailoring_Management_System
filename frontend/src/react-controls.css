@@ -97,3 +97,14 @@ html[dir=rtl] .user-trigger,html[dir=rtl] .user-panel-heading{direction:rtl}
 .app-calendar .react-datepicker__day--outside-month{color:var(--field-label);opacity:.35}
 .app-calendar .react-datepicker__day:not(.react-datepicker__day--outside-month):not(.react-datepicker__day--disabled){color:var(--control-text,#30432f);opacity:1}
 .app-calendar .react-datepicker__day--selected:not(.react-datepicker__day--outside-month){color:#fff}
+
+/* Compact date filters align with the adjacent toolbar selects. */
+.list-toolbar .app-date{width:190px;min-width:0;max-width:100%}
+.list-toolbar .app-date input{height:42px;min-height:42px;border-radius:10px}
+html[dir=rtl] .list-toolbar .app-date input{padding:6px 44px 6px 12px}
+html[dir=ltr] .list-toolbar .app-date input{padding:6px 12px 6px 44px}
+.list-toolbar .app-date .date-control-icon{width:28px;height:28px;border-radius:8px}
+.list-toolbar .date-control-icon svg{width:17px;height:17px}
+.list-toolbar .date-chip-copy{inset-inline-start:44px;inset-inline-end:12px;gap:0}
+.list-toolbar .date-chip-copy small{font-size:9px;line-height:1.3}
+.list-toolbar .date-chip-copy strong{font-size:11px;line-height:1.4}
