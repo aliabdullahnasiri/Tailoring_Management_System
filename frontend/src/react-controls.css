@@ -89,3 +89,11 @@ html[dir=rtl] .sidebar .brand-copy small{line-height:1.35}
 /* Date text stays LTR, so reserve icon space using the page direction. */
 html[dir=rtl] .app-date input,html[dir=rtl] .floating-field .app-date input{padding:12px 58px 12px 14px;text-align:right}
 html[dir=ltr] .app-date input,html[dir=ltr] .floating-field .app-date input{padding:12px 14px 12px 58px;text-align:left}
+
+/* Isolated Latin usernames still align with the RTL account details. */
+html[dir=rtl] .user-trigger-name,html[dir=rtl] .user-trigger-name>bdi,html[dir=rtl] .user-panel-heading>div{text-align:right}
+html[dir=rtl] .user-trigger,html[dir=rtl] .user-panel-heading{direction:rtl}
+/* Distinguish the displayed month from the adjacent-month filler days. */
+.app-calendar .react-datepicker__day--outside-month{color:var(--field-label);opacity:.35}
+.app-calendar .react-datepicker__day:not(.react-datepicker__day--outside-month):not(.react-datepicker__day--disabled){color:var(--control-text,#30432f);opacity:1}
+.app-calendar .react-datepicker__day--selected:not(.react-datepicker__day--outside-month){color:#fff}
