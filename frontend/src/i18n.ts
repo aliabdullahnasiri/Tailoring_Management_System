@@ -16,6 +16,7 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Hover or tap to see details|برای جزئیات نشانگر را ببرید یا لمس کنید|د جزیاتو لپاره اشاره وکړئ یا ټک ورکړئ
 Orders this week|سفارش‌های این هفته|د دې اوونۍ فرمایشونه
 Last 7 days|۷ روز گذشته|تېرې ۷ ورځې
 Order status|وضعیت سفارش‌ها|د فرمایشونو حالت
