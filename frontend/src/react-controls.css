@@ -75,9 +75,9 @@ html[dir=rtl] .app-date .date-control-icon{right:8px}
 .date-chip-copy strong{font-size:12px;line-height:1.5;color:var(--control-text,#30432f);white-space:nowrap}
 .field.floating-field.field-custom:has(.app-date){display:flex;flex-direction:column-reverse;gap:6px}
 .field.floating-field.field-custom:has(.app-date)>span{position:static;font-size:11px;line-height:1.4;padding-inline:3px}
-.topbar .user-trigger-name{line-height:1.2}
-.topbar .user-trigger-name>bdi{font-size:10px;font-weight:500}
-.topbar .user-trigger-name small{font-size:12px;font-weight:600;line-height:1.3;margin-top:2px;color:var(--control-text,#30432f)}
+.topbar .user-trigger-name{line-height:1}
+.topbar .user-trigger-name>bdi{font-size:10px;font-weight:500;line-height:1.1}
+.topbar .user-trigger-name small{font-size:12px;font-weight:600;line-height:1.1;margin-top:0;color:var(--control-text,#30432f)}
 .sidebar .brand-copy small{margin-top:2px;line-height:1.35}
 html[dir=rtl] .sidebar .brand-title{line-height:1.35}
 html[dir=rtl] .sidebar .brand-copy small{line-height:1.35}
@@ -85,3 +85,7 @@ html[dir=rtl] .sidebar .brand-copy small{line-height:1.35}
 .user-panel .user-panel-heading .owner-avatar{width:44px;height:44px;border-radius:12px;border:1px solid var(--field-border)}
 .modal-backdrop .modal{border:1px solid var(--field-border);border-radius:18px;overflow:auto;background-clip:padding-box}
 .modal .modal-heading{padding-bottom:18px;border-bottom:1px solid var(--field-border)}
+
+/* Date text stays LTR, so reserve icon space using the page direction. */
+html[dir=rtl] .app-date input,html[dir=rtl] .floating-field .app-date input{padding:12px 58px 12px 14px;text-align:right}
+html[dir=ltr] .app-date input,html[dir=ltr] .floating-field .app-date input{padding:12px 14px 12px 58px;text-align:left}
