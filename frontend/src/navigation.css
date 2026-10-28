@@ -55,3 +55,6 @@ html[lang=ps] .sidebar .brand-copy small{font-family:'Noto Sans Arabic',Tahoma,s
 [data-theme="dark"] .sidebar .brand-mark{background:linear-gradient(145deg,#334b35,#253b2a);color:#bed6aa;box-shadow:inset 0 0 0 1px #9cbd841a}
 [data-theme="dark"] .sidebar .brand-copy small{color:#a8b99c}
 @media(min-width:721px){.sidebar-mini .brand{padding:0;gap:0}}
+
+.user-dropdown .owner-avatar{background:#e7ede2;color:#58714d}
+[data-theme="dark"] .user-dropdown .owner-avatar{background:#34483b;color:#c0d4b5}

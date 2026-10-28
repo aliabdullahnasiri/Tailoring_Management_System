@@ -4,7 +4,7 @@ import {t,language,setLanguage,useLanguage,formatNumber,formatDate,formatTimesta
 
 import React, {useEffect,useState,useRef, type ReactNode} from 'react';
 import {createRoot} from 'react-dom/client';
-import {Scissors,LayoutDashboard,Users,ShoppingBag,Wallet,BarChart3,Settings as SettingsIcon,Plus,Search,ArrowUpRight,ArrowRight,Check,Clock,AlertCircle,ChevronRight,X,Printer,Download,Upload,Menu,Ruler,CheckCircle2,ShieldCheck,Trash2,Undo2,ChevronDown,LogOut,Sun,Moon,Monitor,PanelLeftClose,PanelLeftOpen,Store,CalendarDays} from 'lucide-react';
+import {Scissors,LayoutDashboard,Users,ShoppingBag,Wallet,BarChart3,Settings as SettingsIcon,Plus,Search,ArrowUpRight,ArrowRight,Check,Clock,AlertCircle,ChevronRight,X,Printer,Download,Upload,Menu,Ruler,CheckCircle2,ShieldCheck,Trash2,Undo2,ChevronDown,LogOut,Sun,Moon,Monitor,PanelLeftClose,PanelLeftOpen,Store,CalendarDays,UserRound} from 'lucide-react';
 import type {State,Customer,Order,Profile,Payment,Settings} from './types';
 import './style.css';
 import './dark.css';
@@ -41,10 +41,6 @@ async function signOut(){try{await api('/auth/signout',{});csrfToken='';window.d
 function UserDropdown({username,shopName,onSettings}:{username:string;shopName:string;onSettings:()=>void}){
  const [expanded,setExpanded]=useState(false);
  const container=useRef<HTMLDivElement>(null),trigger=useRef<HTMLButtonElement>(null);
- const parts=username.trim().split(/[\s._@+\-]+/u).filter(Boolean);
- const initials=(parts.length>1?Array.from(parts[0])[0]+Array.from(parts[parts.length-1])[0]:Array.from(parts[0]||'?').slice(0,2).join('')).toLocaleUpperCase();
- const hash=Array.from(username.normalize('NFC')).reduce((value,char)=>(Math.imul(value,31)+char.codePointAt(0)!)>>>0,0);
- const hue=hash%360;
  useEffect(()=>{
   if(!expanded)return;
   const outside=(event:PointerEvent)=>{if(!container.current?.contains(event.target as Node))setExpanded(false)};
@@ -52,7 +48,7 @@ function UserDropdown({username,shopName,onSettings}:{username:string;shopName:s
   document.addEventListener('pointerdown',outside);document.addEventListener('keydown',escape);
   return()=>{document.removeEventListener('pointerdown',outside);document.removeEventListener('keydown',escape)};
  },[expanded]);
- const avatar=<span className="owner-avatar" aria-hidden="true" style={{background:`hsl(${hue} 38% 90%)`,color:`hsl(${hue} 45% 27%)`}}>{initials}</span>;
+ const avatar=<span className="owner-avatar" aria-hidden="true"><UserRound size={21}/></span>;
  return <div className="user-dropdown" ref={container} onBlur={event=>{if(!event.currentTarget.contains(event.relatedTarget as Node|null))setExpanded(false)}}>
   <button ref={trigger} type="button" className="user-trigger" aria-label={`${t('Account')}: ${username}`} aria-expanded={expanded} aria-controls="user-account-panel" onClick={()=>setExpanded(!expanded)}>
    {avatar}<span className="user-trigger-name"><bdi>{username}</bdi><small>{t('Shop owner')}</small></span><ChevronDown size={14} aria-hidden="true"/>
