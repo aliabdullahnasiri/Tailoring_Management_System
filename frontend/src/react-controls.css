@@ -166,16 +166,16 @@ html[dir=rtl] .floating-field .app-date input{padding-top:24px;padding-bottom:8p
 @media(prefers-reduced-motion:reduce){.weekly-column,.donut-segment{transition:none}}
 
 /* Compact chart spacing with room at the sides and bottom. */
-.dashboard-charts{gap:18px;margin:0 6px 18px}
+.dashboard-charts{gap:18px;margin:0 0 18px}
 .dashboard-charts>.card{padding:16px}
-.dashboard-charts .card-heading{margin-bottom:14px}
+.dashboard-charts .card-heading{padding:0;margin:0 0 14px}
 .dashboard-charts .weekly-chart{padding:0 4px 6px;gap:8px}
 .dashboard-charts .status-chart{gap:18px;padding:0 4px 6px}
 .dashboard-charts .chart-details{margin-top:12px;padding:10px 12px}
 .chart-title{display:flex;align-items:center;gap:8px}
 .chart-title svg{color:var(--field-focus);flex-shrink:0}
 @media(max-width:720px){
- .dashboard-charts{gap:14px;margin:0 4px 14px}
+ .dashboard-charts{gap:14px;margin:0 0 14px}
  .dashboard-charts>.card{padding:14px}
  .dashboard-charts .weekly-chart{gap:4px;padding-inline:0}
 }
@@ -196,4 +196,22 @@ html[dir=rtl] .workspace-settings{--drawer-offset:-24px}
  .workspace-settings[open]::backdrop{animation:reveal-overlay 180ms ease-out}
  .workspace-settings[open].is-closing{animation:drawer-exit 180ms ease-in forwards;pointer-events:none}
  .workspace-settings[open].is-closing::backdrop{animation:dismiss-overlay 180ms ease-in forwards}
+}
+
+/* Keep customer contact details compact in either writing direction. */
+.modal .profile-summary>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.modal .profile-summary strong{line-height:1.25}
+.modal .profile-summary p{margin:0;line-height:1.3}
+.modal .profile-summary small{margin:0;line-height:1.25}
+/* Include popup spacing in its measured box, including when it flips upward. */
+.react-datepicker-popper[data-placement^=bottom]{padding-top:8px}
+.react-datepicker-popper[data-placement^=top]{padding-bottom:8px}
+@keyframes reveal-form-popup{from{opacity:0;scale:.98}to{opacity:1;scale:1}}
+@media(prefers-reduced-motion:no-preference){
+ .floating-field input,.floating-field textarea,.rs__control,.app-date input{transition:border-color 160ms ease,box-shadow 160ms ease,background-color 160ms ease}
+ .floating-field>span,.date-control-icon{transition:color 160ms ease,background-color 160ms ease}
+ .rs__dropdown-indicator{transition:rotate 160ms ease}
+ .rs__control--menu-is-open .rs__dropdown-indicator{rotate:180deg}
+ .rs__menu,.app-calendar{animation:reveal-form-popup 150ms ease-out;transform-origin:center}
+ .rs__option{transition:background-color 120ms ease,color 120ms ease}
 }
