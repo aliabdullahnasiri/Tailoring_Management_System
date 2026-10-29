@@ -99,7 +99,7 @@ fn open_shop(app: &tauri::AppHandle, url: tauri::Url) -> Result<(), Box<dyn std:
     WebviewWindowBuilder::new(app, "main", WebviewUrl::External(url))
         .title("Thread & Ledger")
         .inner_size(1280.0, 840.0)
-        .min_inner_size(860.0, 600.0)
+        .min_inner_size(360.0, 480.0)
         .on_navigation(move |target| target.origin() == origin)
         .initialization_script(
             "window.print = () => window.__TAURI_INTERNALS__.invoke('print_receipt')\
