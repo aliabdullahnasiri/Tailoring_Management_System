@@ -2,3 +2,8 @@
 identifier = "allow-print-receipt"
 description = "Open the native print dialog for the current receipt."
 commands.allow = ["print_receipt"]
+
+[[permission]]
+identifier = "allow-save-preference"
+description = "Persist app display preferences across desktop launches."
+commands.allow = ["save_preference"]

@@ -14,6 +14,65 @@ use tauri::{webview::DownloadEvent, Manager, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_dialog::DialogExt;
 
 #[derive(Default)]
+struct Preferences(Mutex<()>);
+
+fn preference_key(key: &str) -> bool {
+    matches!(
+        key,
+        "thread-ledger-theme"
+            | "thread-ledger-language"
+            | "thread-ledger-appearance"
+            | "thread-ledger-sidebar-mini"
+    ) || (key.starts_with("thread-ledger-notifications:") && key.len() <= 256)
+}
+
+fn read_preferences(
+    path: &std::path::Path,
+) -> Result<std::collections::BTreeMap<String, String>, String> {
+    match std::fs::read(path) {
+        Ok(bytes) => serde_json::from_slice(&bytes).map_err(|error| error.to_string()),
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => Ok(Default::default()),
+        Err(error) => Err(error.to_string()),
+    }
+}
+
+#[tauri::command]
+fn save_preference(
+    app: tauri::AppHandle,
+    state: tauri::State<Preferences>,
+    key: String,
+    value: Option<String>,
+) -> Result<(), String> {
+    if !preference_key(&key)
+        || value
+            .as_ref()
+            .is_some_and(|value| value.len() > 1024 * 1024)
+    {
+        return Err("Invalid desktop preference".into());
+    }
+    let _guard = state.inner().0.lock().map_err(|error| error.to_string())?;
+    let directory = app
+        .path()
+        .app_config_dir()
+        .map_err(|error| error.to_string())?;
+    std::fs::create_dir_all(&directory).map_err(|error| error.to_string())?;
+    let path = directory.join("preferences.json");
+    let mut preferences = read_preferences(&path)?;
+    if let Some(value) = value {
+        preferences.insert(key, value);
+    } else {
+        preferences.remove(&key);
+    }
+    let temporary = directory.join("preferences.json.tmp");
+    std::fs::write(
+        &temporary,
+        serde_json::to_vec(&preferences).map_err(|error| error.to_string())?,
+    )
+    .map_err(|error| error.to_string())?;
+    std::fs::rename(temporary, path).map_err(|error| error.to_string())
+}
+
+#[derive(Default)]
 struct Backend {
     child: Mutex<Option<Child>>,
     stopping: AtomicBool,
@@ -84,14 +143,28 @@ fn valid_backend_url(value: &str) -> Option<tauri::Url> {
 }
 
 fn open_shop(app: &tauri::AppHandle, url: tauri::Url) -> Result<(), Box<dyn std::error::Error>> {
-    // Only this backend's exact origin may call our one native command. The
+    // Only this backend's exact origin may call our native commands. The
     // frontend has no shell, arbitrary filesystem, or process permissions.
     let capability = serde_json::json!({
         "identifier": "shop-printing", "local": false, "windows": ["main"],
         "remote": { "urls": [format!("{}/*", url.origin().ascii_serialization())] },
-        "permissions": ["allow-print-receipt"]
+        "permissions": ["allow-print-receipt", "allow-save-preference"]
     });
     app.add_capability(capability.to_string())?;
+    let preferences = read_preferences(&app.path().app_config_dir()?.join("preferences.json"))
+        .map_err(std::io::Error::other)?;
+    let preferences_script = format!(
+        "({})({}, {}, {});",
+        include_str!("preferences.js"),
+        serde_json::to_string(&preferences)?,
+        serde_json::to_string(&url.origin().ascii_serialization())?,
+        serde_json::to_string(
+            &SystemTime::now()
+                .duration_since(UNIX_EPOCH)?
+                .as_nanos()
+                .to_string()
+        )?
+    );
     let origin = url.origin();
     let download_origin = origin.clone();
     let download_path = Arc::new(Mutex::new(None::<std::path::PathBuf>));
@@ -100,6 +173,7 @@ fn open_shop(app: &tauri::AppHandle, url: tauri::Url) -> Result<(), Box<dyn std:
         .title("Thread & Ledger")
         .inner_size(1280.0, 840.0)
         .min_inner_size(360.0, 480.0)
+        .initialization_script(preferences_script)
         .on_navigation(move |target| target.origin() == origin)
         .initialization_script(
             "window.print = () => window.__TAURI_INTERNALS__.invoke('print_receipt')\
@@ -255,7 +329,8 @@ fn main() {
         }))
         .plugin(tauri_plugin_dialog::init())
         .manage(backend.clone())
-        .invoke_handler(tauri::generate_handler![print_receipt])
+        .manage(Preferences::default())
+        .invoke_handler(tauri::generate_handler![print_receipt, save_preference])
         .setup(move |app| {
             WebviewWindowBuilder::new(app, "startup", WebviewUrl::App("index.html".into()))
                 .title("Thread & Ledger")
