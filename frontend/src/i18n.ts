@@ -16,6 +16,13 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+A5|A5|A5
+Customer measurements|اندازه‌های مشتری|د پېرودونکي اندازې
+Print measurements|چاپ اندازه‌ها|اندازې چاپ کړئ
+Include measurements on receipt|درج اندازه‌ها در رسید|په رسید کې اندازې شاملې کړئ
+Version|نسخه|نسخه
+Prints fit one page. Select the matching paper size and turn off browser headers and footers.|چاپ در یک صفحه تنظیم می‌شود. اندازه کاغذ مطابق را انتخاب کنید و سرصفحه و پاصفحه مرورگر را خاموش کنید.|چاپ په یوه پاڼه کې برابرېږي. د کاغذ سمه اندازه وټاکئ او د براوزر سرلیکونه او پایلیکونه بند کړئ.
+
 Hover or tap to see details|برای جزئیات نشانگر را ببرید یا لمس کنید|د جزیاتو لپاره اشاره وکړئ یا ټک ورکړئ
 Orders this week|سفارش‌های این هفته|د دې اوونۍ فرمایشونه
 Last 7 days|۷ روز گذشته|تېرې ۷ ورځې

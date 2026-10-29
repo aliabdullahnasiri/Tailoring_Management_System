@@ -176,8 +176,8 @@ fn open_shop(app: &tauri::AppHandle, url: tauri::Url) -> Result<(), Box<dyn std:
         .initialization_script(preferences_script)
         .on_navigation(move |target| target.origin() == origin)
         .initialization_script(
-            "window.print = () => window.__TAURI_INTERNALS__.invoke('print_receipt')\
-             .catch(error => window.alert('Could not print: ' + error));",
+            // Keep window.print intact: WebView2 calls it from its native print command.
+            "window.__TMS_PRINT_RECEIPT__ = () => window.__TAURI_INTERNALS__.invoke('print_receipt');",
         )
         .on_download(move |_webview, event| {
             match event {

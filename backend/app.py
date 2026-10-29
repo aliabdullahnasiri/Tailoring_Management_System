@@ -341,7 +341,8 @@ class SettingsIn(Strict):
     phone: str = Field(default="", max_length=30)
     address: str = Field(default="", max_length=300)
     language: Literal["en", "fa", "ps"] = "en"
-    receipt_width: Literal["a4", "80mm"] = "a4"
+    receipt_width: Literal["a4", "a5", "80mm"] = "a4"
+    print_measurements: bool = False
 
 
 def paid(c, order_id):
