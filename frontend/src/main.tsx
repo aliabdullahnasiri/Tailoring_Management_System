@@ -4,7 +4,7 @@ import {DashboardCharts} from './DashboardCharts';
 import {AppSelect,AppDatePicker} from './ReactControls';
 import {WorkspaceSettings,NavbarDate} from './WorkspaceSettings';
 import {Paginated} from './Paginated';
-import {Notifications} from './Notifications';
+import {Notifications} from './NotificationMenu';
 import {PageSkeleton} from './Skeleton';
 import {StartupScreen} from './StartupScreen';
 import {setTheme,useTheme} from './theme';
