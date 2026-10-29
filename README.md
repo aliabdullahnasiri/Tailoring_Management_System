@@ -87,11 +87,110 @@ uv run pytest
 
 Alternatively create `.venv` with Python, install `backend/requirements.txt`, then run `.venv/bin/python -m pytest` (Windows: `.venv\Scripts\python.exe -m pytest`). The lockfile pins dependencies. Update dependencies deliberately and rerun tests before distributing an updated release.
 
+## Desktop app (Tauri)
+
+The desktop app uses Tauri 2 for its window and a PyInstaller executable for the
+existing FastAPI backend. React, SQLite, sign-in, and database migrations stay
+in the existing app. Python and Node.js are not required on the user's machine.
+The backend binds only to localhost on an automatically assigned free port.
+Closing the app stops the backend; opening the app again focuses the existing
+window. Existing shop data remains in the data directory described above.
+
+For a local desktop run, install Python 3.12+, Node.js 22+, the stable Rust
+toolchain (Rust 1.90+), and the [Tauri system prerequisites](https://v2.tauri.app/start/prerequisites/).
+On Arch Linux these include `webkit2gtk-4.1`, `base-devel`, `openssl`,
+`libappindicator-gtk3`, `librsvg`, and `patchelf`. On Windows, install the
+Microsoft C++ Build Tools and WebView2; on macOS, install the Xcode command-line
+tools.
+
+From the project root:
+
+```sh
+python -m venv .venv
+.venv/bin/python -m pip install -r backend/requirements.txt pyinstaller==6.22.3
+cd frontend
+npm ci
+npm run desktop:dev
+```
+
+On Windows use `.venv\Scripts\python.exe` for the dependency installation.
+If `.venv` already exists, skip creating it. The preparation step builds React
+and packages Python automatically. The first Rust build downloads dependencies
+and can take several minutes. `desktop:dev` uses the built frontend; after
+editing React or Python, stop it and run the command again. Use `npm run dev`
+for the separate browser-based frontend with hot reload.
+
+To use a separate shop while testing, from the project root on Linux/macOS:
+
+```sh
+cd frontend
+TMS_DATA_DIR="$(mktemp -d)" npm run desktop:dev
+```
+
+Build installers with:
+
+```sh
+cd frontend
+npm run desktop:build
+```
+
+Local Linux builds produce `.deb` and `.rpm` installers. AppImages are built
+separately by the Ubuntu CI job: linuxdeploy can accidentally collect private
+libraries from software installed on a developer's machine. On this Arch
+machine, its recursive library scan picked up VMware's private GTK library
+and failed because `libcroco-0.6.so.3` was unavailable. This does not prevent
+the native app or the Debian/RPM packages from building.
+
+To regenerate installers from an already completed build without recompiling:
+
+```sh
+cd frontend
+npm run tauri -- bundle
+```
+
+To explicitly request an AppImage on a suitable build machine, use
+`npm run desktop:build -- --bundles appimage`. For distribution, prefer the
+Ubuntu CI artifact rather than an AppImage built on Arch.
+
+Installers appear in `frontend/src-tauri/target/release/bundle/`. Build on the
+target OS and architecture. Set `TMS_PYTHON` to an absolute Python executable
+path if you need an environment other than the root `.venv`.
+
+Receipts use the native print dialog. Backups download to the system Downloads
+folder with a unique name, followed by a confirmation showing the saved path;
+copy them to a USB drive or another safe location. Restore uses the existing
+file picker. Native printing, download dialogs, and installers need a manual
+check on each target OS before distribution. The desktop launcher ignores
+`TMS_PUBLIC_ORIGIN` and `TMS_SETUP_KEY`, which are for HTTPS hosting only.
+
+## Automated builds and releases
+
+GitHub Actions builds the frontend, runs Python tests, packages the Python
+backend, and builds Tauri installers on pushes, pull requests, and manual runs.
+It also runs Rust checks and smoke-tests the packaged backend, including
+startup, migrations, signup, frontend assets, data persistence, and shutdown.
+
+Download an artifact from the workflow run:
+
+- `tailoring-ms-windows-x64`: Windows setup executable.
+- `tailoring-ms-linux-x64`: Debian package and AppImage.
+- `tailoring-ms-macos-arm64`: Apple Silicon DMG.
+
+Extract the ZIP and run the installer for your platform. On Linux, make an
+AppImage executable with `chmod +x <filename>.AppImage` before launching it.
+Builds are unsigned; macOS may require approval in System Settings > Privacy &
+Security. Pushing a tag beginning with `v`, such as `v1.0.0`, publishes all
+three installer archives to a GitHub Release after every build passes.
+
+For the original browser-based PyInstaller package, build React first and run
+`python -m PyInstaller --clean --noconfirm tms-backend.spec` from the project
+root. Its output is `dist/tms-backend/`.
+
 ## Included / deferred
 
 Included: six navigation sections; customer create/edit/search and duplicate warnings; measurement profiles with units and version history; multiple order items and snapshots; status and delivery history; partial payments, idempotent submission, reversals and balance checks; printable receipts; live dashboard and date-filtered reports; shop settings; SQLite backup/restore; responsive layouts.
 
-Deferred as specified: cloud sync, multiple accounts, multi-branch management, inventory, payroll, expense accounting, WhatsApp/SMS, customer mobile applications, AI measurements and desktop EXE packaging. Reports deliberately do not claim net profit. No demo customers or payments are shipped in your live database.
+Deferred as specified: cloud sync, multiple accounts, multi-branch management, inventory, payroll, expense accounting, WhatsApp/SMS, customer mobile applications, AI measurements and signed desktop installers. Reports deliberately do not claim net profit. No demo customers or payments are shipped in your live database.
 
 ## Verification
 

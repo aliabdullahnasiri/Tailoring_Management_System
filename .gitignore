@@ -59,3 +59,12 @@ full_diff.txt
 
 # Celery
 celerybeat-schedule*
+
+# Keep the reproducible application build specification.
+!tms-backend.spec
+
+# Tauri build outputs and generated schemas
+frontend/src-tauri/target/
+frontend/src-tauri/gen/
+frontend/src-tauri/binaries/*
+tailoring-ms-*.zip

@@ -5,12 +5,15 @@ from pathlib import Path
 def test_real_server_with_bundled_assets(tmp_path):
     root=Path(__file__).resolve().parents[2]
     with socket.socket() as s:s.bind(('127.0.0.1',0));port=s.getsockname()[1]
-    env={**os.environ,'TMS_DATA_DIR':str(tmp_path/'shop')}
-    process=subprocess.Popen([sys.executable,'-m','uvicorn','app:app','--host','127.0.0.1','--port',str(port)],cwd=root/'backend',env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+    env={**os.environ,'TMS_DATA_DIR':str(tmp_path/'shop'), 'PYTHONPATH':str(root/'backend')}
+    command = ([os.environ['TMS_EXECUTABLE'], '--no-browser', '--port', str(port)]
+               if os.environ.get('TMS_EXECUTABLE') else
+               [sys.executable, '-m', 'uvicorn', 'app:app', '--host', '127.0.0.1', '--port', str(port)])
+    process=subprocess.Popen(command,cwd=tmp_path,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
     try:
         base=f'http://127.0.0.1:{port}'
         opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
-        for _ in range(50):
+        for _ in range(200):
             try:
                 with opener.open(base+'/api/auth/status',timeout=1) as r:status=json.load(r)
                 break
@@ -21,7 +24,7 @@ def test_real_server_with_bundled_assets(tmp_path):
         with opener.open(request,timeout=3) as r:csrf=json.load(r)['csrf']
         with opener.open(base+'/api/state',timeout=2) as r:assert json.load(r)['customers']==[]
         with urllib.request.urlopen(base,timeout=2) as r:html=r.read().decode()
-        assert 'Thread &amp; Ledger' in html or 'Thread & Ledger' in html
+        assert html == (root/'frontend/dist/index.html').read_text(encoding='utf-8')
         import re
         assets=re.findall(r'(?:src|href)="(/assets/[^"]+)"',html)
         assert len(assets)>=2
@@ -32,9 +35,9 @@ def test_real_server_with_bundled_assets(tmp_path):
     finally:
         process.terminate();process.wait(timeout=10)
     # A completely new process reads the same persistent database.
-    process=subprocess.Popen([sys.executable,'-m','uvicorn','app:app','--host','127.0.0.1','--port',str(port)],cwd=root/'backend',env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+    process=subprocess.Popen(command,cwd=tmp_path,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
     try:
-        for _ in range(50):
+        for _ in range(200):
             try:
                 with opener.open(base+'/api/state',timeout=1) as r:state=json.load(r)
                 break

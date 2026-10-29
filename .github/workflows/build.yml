@@ -1,0 +1,116 @@
+name: Build and release
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux-x64
+            executable: tms-backend
+            bundles: deb,appimage
+          - os: windows-latest
+            platform: windows-x64
+            executable: tms-backend.exe
+            bundles: nsis
+          - os: macos-15
+            platform: macos-arm64
+            bundles: dmg
+            executable: tms-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install Linux desktop dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev librsvg2-dev libayatana-appindicator3-dev patchelf
+      - name: Install Rust
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            frontend/src-tauri/target
+          key: tauri-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('frontend/src-tauri/Cargo.lock') }}
+      - name: Install Python dependencies
+        run: python -m pip install -r backend/requirements.txt pyinstaller==6.22.3
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: frontend
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
+      - name: Test application
+        run: python -m pytest -q
+      - name: Build desktop installers
+        run: npm run desktop:build -- --ci --bundles ${{ matrix.bundles }} -- --locked
+        working-directory: frontend
+      - name: Test desktop launcher
+        run: cargo test --locked --manifest-path frontend/src-tauri/Cargo.toml
+      - name: Test packaged application
+        env:
+          TMS_EXECUTABLE: ${{ github.workspace }}/dist/tms-sidecar/${{ matrix.executable }}
+        run: python -m pytest -q backend/tests/test_server.py backend/tests/test_desktop.py
+      - name: Archive distribution
+        run: python scripts/archive-desktop.py ${{ matrix.platform }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tailoring-ms-${{ matrix.platform }}
+          path: tailoring-ms-${{ matrix.platform }}.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish tagged release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: tailoring-ms-*
+          merge-multiple: true
+          path: release
+      - name: Publish release archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$TAG" > /dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag --title "$TAG" --generate-notes
+          fi
+          gh release upload "$TAG" release/*.zip --clobber

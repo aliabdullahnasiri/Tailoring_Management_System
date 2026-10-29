@@ -34,3 +34,13 @@ This verification record is not a claim of zero defects or completion of manual 
 8. Disconnect internet after setup, restart the local application and complete the same workflow.
 9. Back up the sample database, change a sample record, restore the backup and verify the earlier state.
 10. Ask the operator to complete a new customer/order/payment without assistance.
+
+## Tauri desktop integration (2026-10-29)
+
+- Local Linux: React production build and PyInstaller single-file backend build passed.
+- Python suite: 28 tests passed, including the desktop ready-address protocol and shutdown on parent-pipe closure.
+- Packaged backend: HTTP workflow/persistence and desktop lifecycle smoke tests passed.
+- Rust launcher: compiled; backend-address validation test passed.
+- Native Linux startup: created the Tauri window, installed the runtime printing capability, and verified the desktop-managed backend's auth status and React page over HTTP with an isolated temporary shop directory.
+- GitHub Actions now builds Windows NSIS, Linux Debian/AppImage, and Apple Silicon macOS DMG installers and publishes installer archives for version tags. Hosted builds have not been run from this workspace.
+- Manual checks remain for native receipt printing, backup download/restore dialogs, installed packages, and Windows/macOS window behavior. Signing and notarization are not configured.
