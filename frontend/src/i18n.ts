@@ -89,6 +89,7 @@ Shop|دکان|دوکان
 Language|زبان|ژبه
 Dashboard|داشبورد|ډشبورډ
 Customers|مشتریان|پېرودونکي
+Customer|مشتری|پېرودونکی
 Orders|سفارش‌ها|سپارښتنې
 Payments|پرداخت‌ها|تادیات
 Reports|گزارش‌ها|راپورونه
@@ -309,6 +310,7 @@ Add a new customer first|ابتدا مشتری جدید اضافه کنید|لو
 CLOTHING ITEMS|اقلام لباس|د جامو توکي
 Remove item|حذف قلم|توکی لرې کول
 Quantity|تعداد|شمېر
+Unit price|قیمت فی واحد|د یوه توکي بیه
 Unit price (AFN)|قیمت فی واحد (افغانی)|د یوه توکي بیه (افغانۍ)
 Saved measurements|اندازه‌های ذخیره‌شده|خوندي شوې اندازې
 No measurement profile|بدون پروفایل اندازه|د اندازو پروفایل نشته
