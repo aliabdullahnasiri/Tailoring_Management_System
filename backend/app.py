@@ -216,25 +216,25 @@ async def local_only(request: Request, call_next):
         urlparse(os.getenv("TMS_PUBLIC_ORIGIN", "")).hostname,
     ):
         return JSONResponse({"detail": "Local access only."}, 403)
-    # origin = request.headers.get("origin")
-    # if (
-    #     request.method not in ("GET", "HEAD", "OPTIONS")
-    #     and origin
-    #     and origin
-    #     not in (
-    #         "http://127.0.0.1:8000",
-    #         "http://localhost:8000",
-    #         "http://127.0.0.1:5173",
-    #         "http://localhost:5173",
-    #         os.getenv("TMS_PUBLIC_ORIGIN", "").rstrip("/"),
-    #     )
-    # ):
-    #     return JSONResponse({"detail": "Origin not allowed."}, 403)
-    # if (
-    #     request.method not in ("GET", "HEAD", "OPTIONS")
-    #     and request.headers.get("sec-fetch-site") == "cross-site"
-    # ):
-    #     return JSONResponse({"detail": "Origin not allowed."}, 403)
+    origin = request.headers.get("origin")
+    if (
+        request.method not in ("GET", "HEAD", "OPTIONS")
+        and origin
+        and origin
+        not in (
+            "http://127.0.0.1:8000",
+            "http://localhost:8000",
+            "http://127.0.0.1:5173",
+            "http://localhost:5173",
+            os.getenv("TMS_PUBLIC_ORIGIN", "").rstrip("/"),
+        )
+    ):
+        return JSONResponse({"detail": "Origin not allowed."}, 403)
+    if (
+        request.method not in ("GET", "HEAD", "OPTIONS")
+        and request.headers.get("sec-fetch-site") == "cross-site"
+    ):
+        return JSONResponse({"detail": "Origin not allowed."}, 403)
     return await call_next(request)
 
 
