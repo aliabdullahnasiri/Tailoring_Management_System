@@ -226,6 +226,7 @@ async def local_only(request: Request, call_next):
             "http://localhost:8000",
             "http://127.0.0.1:5173",
             "http://localhost:5173",
+            getattr(request.app.state, "desktop_origin", None),
             os.getenv("TMS_PUBLIC_ORIGIN", "").rstrip("/"),
         )
     ):

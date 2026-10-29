@@ -14,7 +14,9 @@ class DesktopServer(uvicorn.Server):
             # Emitted only after migrations and the listener are ready. Port 0 lets
             # the OS reserve a free port without a bind/close race in the desktop app.
             port = self.servers[0].sockets[0].getsockname()[1]
-            print(f'TMS_READY http://127.0.0.1:{port}', flush=True)
+            origin = f'http://127.0.0.1:{port}'
+            self.config.app.state.desktop_origin = origin
+            print(f'TMS_READY {origin}', flush=True)
 
 
 def main():
