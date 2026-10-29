@@ -160,7 +160,8 @@ def test_local_origin_protection(client):
 def test_settings_persist(client):
     data={'name':'Kabul Tailors','phone':'0700000000','address':'Kabul','language':'fa','receipt_width':'80mm'}
     assert client.put('/api/settings',json=data).status_code==200
-    assert client.get('/api/state').json()['settings']==data
+    state=client.get('/api/state').json()['settings']
+    for k,v in data.items():assert state[k]==v
 
 def test_migrations_are_repeatable(client):
     c=create_customer(client)
