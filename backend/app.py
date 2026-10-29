@@ -7,7 +7,7 @@ import sys
 import tempfile
 import threading
 import uuid
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, closing
 from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Literal
@@ -597,7 +597,7 @@ def set_settings(x: SettingsIn):
 def backup():
     with lock, tempfile.TemporaryDirectory() as d:
         target = Path(d) / "backup.db"
-        with sqlite3.connect(DB) as src, sqlite3.connect(target) as dst:
+        with closing(sqlite3.connect(DB)) as src, closing(sqlite3.connect(target)) as dst:
             src.backup(dst)
         return Response(
             target.read_bytes(),
@@ -617,7 +617,7 @@ def restore(file: UploadFile):
             raise HTTPException(400, "Backup exceeds 50 MB.")
         incoming.write_bytes(content)
         try:
-            with sqlite3.connect(incoming) as src:
+            with closing(sqlite3.connect(incoming)) as src:
                 if (
                     src.execute("PRAGMA integrity_check").fetchone()[0] != "ok"
                     or src.execute("PRAGMA foreign_key_check").fetchall()
@@ -719,9 +719,9 @@ def restore(file: UploadFile):
         safety = DATA / (
             "before-restore-" + datetime.now().strftime("%Y%m%d-%H%M%S-%f") + ".db"
         )
-        with sqlite3.connect(DB) as src, sqlite3.connect(safety) as dst:
+        with closing(sqlite3.connect(DB)) as src, closing(sqlite3.connect(safety)) as dst:
             src.backup(dst)
-        with sqlite3.connect(incoming) as src, sqlite3.connect(DB) as dst:
+        with closing(sqlite3.connect(incoming)) as src, closing(sqlite3.connect(DB)) as dst:
             src.backup(dst)
         return {"ok": True, "safety_backup": safety.name}
 

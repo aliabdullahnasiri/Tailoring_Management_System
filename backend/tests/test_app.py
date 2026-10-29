@@ -1,6 +1,7 @@
 import os, tempfile, uuid, importlib, sqlite3
 from datetime import date,timedelta
 from pathlib import Path
+from contextlib import closing
 import pytest
 from fastapi.testclient import TestClient
 
@@ -115,11 +116,30 @@ def test_invalid_restore_preserves_data(client):
     assert client.post('/api/restore',files={'file':('bad.db',b'not sqlite')}).status_code==400
     assert client.get('/api/state').json()==before
 
+def test_backup_restore_closes_sqlite_connections(client,monkeypatch):
+    connections=[]
+    connect=sqlite3.connect
+    def track_connection(*args,**kwargs):
+        kwargs['check_same_thread']=False
+        connection=connect(*args,**kwargs)
+        if Path(args[0]).name in ('backup.db','restore.db'):
+            connections.append(connection)
+        return connection
+    monkeypatch.setattr(sqlite3,'connect',track_connection)
+    backup=client.get('/api/backup')
+    assert backup.status_code==200
+    assert client.post('/api/restore',files={'file':('backup.db',backup.content)}).status_code==200
+    assert client.post('/api/restore',files={'file':('bad.db',b'not sqlite')}).status_code==400
+    assert connections
+    for connection in connections:
+        with pytest.raises(sqlite3.ProgrammingError,match='closed'):
+            connection.execute('SELECT 1')
+
 def test_backup_with_broken_balance_rejected(client,tmp_path):
     c=create_customer(client);order(client,c['id'])
     backup=client.get('/api/backup').content
     bad=tmp_path/'bad.db';bad.write_bytes(backup)
-    with sqlite3.connect(bad) as db:db.execute('UPDATE payments SET amount=999999')
+    with closing(sqlite3.connect(bad)) as db, db:db.execute('UPDATE payments SET amount=999999')
     assert client.post('/api/restore',files={'file':('bad.db',bad.read_bytes())}).status_code==400
     assert client.get('/api/state').json()['orders'][0]['balance']==2200
 

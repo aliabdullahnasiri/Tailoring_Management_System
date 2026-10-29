@@ -23,8 +23,9 @@ def test_real_server_with_bundled_assets(tmp_path):
         request=urllib.request.Request(base+'/api/auth/signup',data=json.dumps({'username':'smokeowner','password':'smoke-password-123'}).encode(),headers={'Content-Type':'application/json'})
         with opener.open(request,timeout=3) as r:csrf=json.load(r)['csrf']
         with opener.open(base+'/api/state',timeout=2) as r:assert json.load(r)['customers']==[]
-        with urllib.request.urlopen(base,timeout=2) as r:html=r.read().decode()
-        assert html == (root/'frontend/dist/index.html').read_text(encoding='utf-8')
+        with urllib.request.urlopen(base,timeout=2) as r:html_bytes=r.read()
+        assert html_bytes == (root/'frontend/dist/index.html').read_bytes()
+        html=html_bytes.decode('utf-8')
         import re
         assets=re.findall(r'(?:src|href)="(/assets/[^"]+)"',html)
         assert len(assets)>=2

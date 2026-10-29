@@ -35,7 +35,7 @@ def test_desktop_ready_port_and_parent_shutdown(tmp_path):
             with urllib.request.urlopen(address + '/api/auth/status', timeout=3) as response:
                 assert json.load(response)['signup_allowed']
             with urllib.request.urlopen(address, timeout=3) as response:
-                assert response.read().decode() == (root / 'frontend/dist/index.html').read_text(encoding='utf-8')
+                assert response.read() == (root / 'frontend/dist/index.html').read_bytes()
             # This is the desktop's normal shutdown and crash-detection mechanism.
             process.stdin.close()
             assert process.wait(timeout=10) == 0

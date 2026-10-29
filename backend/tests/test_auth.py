@@ -1,3 +1,4 @@
+from contextlib import closing
 import importlib, sqlite3
 from concurrent.futures import ThreadPoolExecutor
 import pytest
@@ -29,7 +30,7 @@ def test_protected_and_single_owner(raw):
     assert c.get('/api/state').status_code==200
     assert c.post('/api/auth/signup',json=CREDS).status_code==409
     assert not c.get('/api/auth/status').json()['signup_allowed']
-    with sqlite3.connect(path/'authentication.db') as db:
+    with closing(sqlite3.connect(path/'authentication.db')) as db, db:
         owner=db.execute('select username,password_hash from owner').fetchone()
         assert owner[0]=='owner' and owner[1]!=CREDS['password']
         assert db.execute('select token_hash from sessions').fetchone()[0]!=c.cookies.get('tms_session')
@@ -74,7 +75,7 @@ def test_concurrent_signup(raw):
 
 def test_expiry_and_rate_limit(raw):
     c,path,module=raw;signup(c)
-    with sqlite3.connect(path/'authentication.db') as db:db.execute('update sessions set expires=0')
+    with closing(sqlite3.connect(path/'authentication.db')) as db, db:db.execute('update sessions set expires=0')
     assert c.get('/api/state').status_code==401
     for _ in range(10):assert c.post('/api/auth/signin',json={**CREDS,'password':'wrong'}).status_code==401
     assert c.post('/api/auth/signin',json=CREDS).status_code==429
