@@ -34,9 +34,9 @@
 [data-theme="dark"] .nav-item.selected{box-shadow:inset 0 0 0 1px #425b39}
 [data-theme="dark"] .theme-switcher select{background:#233128;color:#c4d3bc}
 @media(min-width:721px){
- .sidebar-mini .shop-label{min-height:58px;margin-block:26px 20px;padding:8px 0;background:transparent;border-color:transparent}
+ .sidebar-mini .shop-label{min-height:0;aspect-ratio:1;justify-content:center;gap:0;margin-block:26px 20px;padding:6px;background:transparent;border-color:transparent}
  .sidebar-mini .shop-copy,.sidebar-mini .shop-chevron{display:none}
- .sidebar-mini .shop-emblem{flex-basis:40px}
+ .sidebar-mini .shop-emblem{flex:1;min-width:0;height:auto;aspect-ratio:1}
 }
 @media(max-width:1150px){.top-right .date{display:none}.topbar{padding-inline:24px}}
 @media(max-width:720px){.topbar{height:72px;padding-inline:16px;gap:10px}.topbar .breadcrumb{gap:10px}.topbar .sidebar-toggle{display:none}.topbar .mobile-menu{display:inline-flex}.topbar .topbar-location strong{font-size:14px}.top-right{gap:8px}.topbar-tools{padding-inline-end:8px}.user-trigger-name{display:none}.user-trigger{gap:5px;padding-inline:4px}.theme-switcher select{max-width:110px}}
