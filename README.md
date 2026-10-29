@@ -55,7 +55,7 @@ For your own HTTPS server, set `TMS_PUBLIC_ORIGIN=https://your-domain.example` a
 
 Print an order from its details or print a payment from Payment history. Select Save as PDF in the browser/operating-system print dialog when available. A4, A5, and 80 mm receipt layouts are available in Settings. Receipts and measurement sheets automatically scale to one page; longer documents use smaller text. Configure the matching paper size in the printer dialog and disable browser headers and footers. The 80 mm layout uses an 80 × 297 mm page. Physical printer output has not been tested here.
 
-Use Customers > Measurements > Print measurements to print all profiles, or the print button on a profile to print only that profile. Enable Include measurements on receipt in Settings as the default, or change the checkbox beside Print receipt for an individual order. Order receipts print the original measurement snapshots attached to the order; payment receipts keep their payment-focused layout.
+Use Customers > Measurements > Print measurements to print all profiles, or the print button on a profile to print only that profile. Standalone measurement sheets always use A4. A4 order and payment receipts automatically include the original measurement snapshots attached to the order. A5 and 80 mm receipts omit measurements; no checkbox is needed.
 
 Dates use the computer's local calendar/timezone. Set the shop computer's clock and timezone correctly. Timestamp records are stored in UTC and shown in local time. Gregorian dates ship in v1; Solar Hijri is deferred by the PRD. A reprinted receipt shows the order's current total paid/balance and the original individual payment amount/date.
 
