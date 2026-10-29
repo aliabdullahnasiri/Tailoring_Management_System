@@ -342,6 +342,7 @@ class SettingsIn(Strict):
     address: str = Field(default="", max_length=300)
     language: Literal["en", "fa", "ps"] = "en"
     receipt_width: Literal["a4", "a5", "80mm"] = "a4"
+    # Accepted for compatibility with older backups; paper size now controls printing.
     print_measurements: bool = False
 
 
