@@ -16,6 +16,10 @@ export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-A
 export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
 export const translations:Record<string,[string,string]>={};
 const rows=`
+Search workspace|جستجو در فضای کاری|په کاري ځای کې لټون
+Search customers, orders or payments…|جستجوی مشتریان، سفارش‌ها یا پرداخت‌ها…|پېرودونکي، فرمایشونه یا تادیات ولټوئ…
+No results found|نتیجه‌ای یافت نشد|پایلې ونه موندل شوې
+Clear search|پاک کردن جستجو|لټون پاک کړئ
 A5|A5|A5
 Customer measurements|اندازه‌های مشتری|د پېرودونکي اندازې
 Print measurements|چاپ اندازه‌ها|اندازې چاپ کړئ
