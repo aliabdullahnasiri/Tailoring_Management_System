@@ -68,3 +68,6 @@ frontend/src-tauri/target/
 frontend/src-tauri/gen/
 frontend/src-tauri/binaries/*
 tailoring-ms-*.zip
+
+# Worktree
+.worktree/
