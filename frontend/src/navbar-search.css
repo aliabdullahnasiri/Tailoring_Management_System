@@ -1,0 +1,43 @@
+.navbar-search{position:relative;width:160px;transition:width .22s ease;flex-shrink:0;color:var(--field-label)}
+.navbar-search.expanded{width:clamp(200px,23vw,320px)}
+.nav-search-field{display:flex;align-items:center;gap:8px;padding:5px;padding-inline-end:10px;border:1px solid var(--line);border-radius:11px;background:var(--field-surface);min-height:44px}
+.nav-search-symbol{display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;border-radius:8px;background:var(--picker-hover);color:var(--field-focus)}
+.nav-search-field:focus-within{border-color:var(--field-focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--field-focus) 12%,transparent)}
+.nav-search-field input{width:100%;min-width:0;padding:4px 0;min-height:32px;border:0;background:transparent;color:inherit;font-size:12px;outline:none}
+.nav-search-field input::-webkit-search-cancel-button{display:none}
+/* Override the shared input focus outline; the field supplies one focus ring. */
+html .nav-search-field input,html .nav-search-field input:focus,html .nav-search-field input:focus-visible{border:0;outline:none;box-shadow:none;background:transparent}
+.topbar .nav-search-trigger{border-radius:11px;padding:5px}
+.nav-search-skeleton{display:flex;align-items:center;gap:10px;padding:8px}
+.nav-search-skeleton>.skeleton-avatar{flex:0 0 35px}
+.nav-search-skeleton>div{flex:1}
+.nav-search-skeleton .skeleton-title{height:12px}
+.nav-search-results{position:absolute;inset-inline-end:0;top:calc(100% + 8px);width:min(380px,calc(100vw - 24px));max-height:60dvh;overflow:auto;background:var(--field-surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 36px #10211925;padding:12px;z-index:45;text-align:start}
+.nav-search-results p{padding:12px;color:var(--field-label)}
+.nav-search-results h3{font-size:11px;color:var(--field-label);padding:10px 6px}
+.nav-search-results button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 8px;text-align:start;border-radius:8px;min-height:48px}
+.nav-search-results button:hover{background:var(--picker-hover)}
+.nav-search-results button span{display:grid;gap:4px;min-width:0;overflow-wrap:anywhere}
+.nav-search-results strong{font-size:12px;color:var(--field-focus)}
+.nav-search-results small{color:var(--field-label)}
+.nav-search-dialog{padding:0;border:1px solid var(--line);border-radius:16px;background:var(--field-surface);color:var(--field-label);width:calc(100% - 24px);max-width:520px;max-height:calc(100dvh - 24px);margin:12px auto;overflow:hidden}
+.nav-search-dialog::backdrop{background:#10211988;backdrop-filter:blur(3px)}
+.nav-search-dialog>div{display:flex;flex-direction:column;max-height:calc(100dvh - 26px);padding:16px}
+.nav-search-dialog header,.nav-search-dialog .nav-search-field{flex-shrink:0}
+.nav-search-dialog header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.nav-search-dialog header button{min-width:44px;min-height:44px}
+.nav-search-dialog .nav-search-results{position:static;width:100%;min-height:0;max-height:none;overflow-y:auto;overscroll-behavior:contain;box-shadow:none;border:0;margin-block:12px;padding:0;scroll-padding-block:12px}
+.nav-search-dialog input{font-size:16px}
+@media(min-width:721px) and (max-width:980px){.navbar-search{width:135px}.navbar-search.expanded{width:200px}.topbar .top-right{gap:6px}.topbar .topbar-tools{padding-inline-end:6px}.topbar{padding-inline:12px}}
+@media(max-width:720px){.navbar-search,.navbar-search.expanded{width:44px}.nav-search-trigger{width:44px;height:44px;border:1px solid var(--line);border-radius:11px;background:var(--field-surface)}}
+@media(prefers-reduced-motion:reduce){.navbar-search{transition:none}}
+@keyframes nav-search-enter{from{opacity:0;transform:translateY(-12px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes nav-search-exit{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-8px) scale(.98)}}
+@keyframes nav-search-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes nav-search-backdrop-out{from{opacity:1}to{opacity:0}}
+@media(prefers-reduced-motion:no-preference){
+ .nav-search-dialog[open]{animation:nav-search-enter 220ms ease-out both}
+ .nav-search-dialog[open]::backdrop{animation:nav-search-backdrop-in 220ms ease-out both}
+ .nav-search-dialog[open].is-closing{animation:nav-search-exit 180ms ease-in both}
+ .nav-search-dialog[open].is-closing::backdrop{animation:nav-search-backdrop-out 180ms ease-in both}
+}
