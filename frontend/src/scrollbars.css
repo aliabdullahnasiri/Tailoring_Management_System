@@ -11,11 +11,15 @@
  /* Chromium/WebKit offer rounded thumbs and distinct hover/drag feedback. */
  @supports selector(::-webkit-scrollbar){
   *{scrollbar-width:auto;scrollbar-color:auto}
-  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar{width:12px;height:12px}
   ::-webkit-scrollbar-track{background:var(--scroll-track);border-radius:20px}
-  ::-webkit-scrollbar-thumb{min-height:36px;min-width:36px;background:var(--scroll-thumb);border:3px solid transparent;background-clip:padding-box;border-radius:20px}
-  ::-webkit-scrollbar-thumb:hover{background:var(--scroll-hover);border:2px solid transparent;background-clip:padding-box}
-  ::-webkit-scrollbar-thumb:active{background:var(--scroll-active);border:2px solid transparent;background-clip:padding-box}
+  /* Keep every vertical scrollbar clear of rounded corners without adding
+     horizontal padding or changing the scroll container's content layout. */
+  ::-webkit-scrollbar-track:vertical{margin-top:12px;margin-bottom:12px}
+  ::-webkit-scrollbar-track:horizontal{margin-left:6px;margin-right:6px}
+  ::-webkit-scrollbar-thumb{min-height:36px;min-width:36px;background:var(--scroll-thumb);border:4px solid transparent;background-clip:padding-box;border-radius:20px}
+  ::-webkit-scrollbar-thumb:hover{background:var(--scroll-hover);border:4px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:active{background:var(--scroll-active);border:4px solid transparent;background-clip:padding-box}
   ::-webkit-scrollbar-corner{background:transparent}
   ::-webkit-scrollbar-button{display:none}
  }
