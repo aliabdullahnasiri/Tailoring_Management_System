@@ -1,0 +1,999 @@
+/* TMS Fabric Management UI v2
+   Scoped, layout-safe overrides. No changes to business logic.
+   Charts have explicit geometry to prevent app-wide SVG/button styles
+   from stretching them beyond their card boundaries. */
+
+.fabric-module-refined {
+  --fabric-gap: clamp(16px, 1.9vw, 24px);
+  --fabric-outline: var(--field-border, rgba(140, 161, 151, 0.18));
+  --fabric-surface: var(--card-bg, var(--surface, rgba(130, 149, 139, 0.055)));
+  --fabric-muted: var(--text-muted, var(--muted, #98a29e));
+  --fabric-accent: var(--accent, #88ad8b);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fabric-gap);
+  width: 100%;
+  min-width: 0;
+  max-width: 1440px;
+  padding: clamp(16px, 2.2vw, 30px);
+  margin-inline: auto;
+  text-align: start;
+}
+.fabric-module-refined *,
+.fabric-module-refined *::before,
+.fabric-module-refined *::after {
+  box-sizing: border-box;
+}
+.fabric-module-refined
+  :is(
+    .fabric-intro,
+    .fabric-stats,
+    .fabric-overview-charts,
+    .fabric-page-content,
+    .fabric-chart-card,
+    .fabric-allocation-chart,
+    .fabric-chart-legend,
+    .fabric-bar-chart,
+    .fabric-bar-plot
+  ) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Single, compact header; same heading is not repeated above the charts. */
+.fabric-module-refined .fabric-intro-refined {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 28px;
+  width: 100%;
+  margin: 0;
+  padding: clamp(20px, 2.5vw, 32px);
+  border: 1px solid var(--fabric-outline);
+  border-radius: 14px;
+  background: linear-gradient(
+    110deg,
+    rgba(96, 145, 111, 0.085),
+    transparent 80%
+  );
+  animation: fabric-fade-up 0.36s ease-out both;
+}
+.fabric-module-refined .fabric-intro-copy {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.fabric-module-refined .fabric-intro-copy .eyebrow {
+  display: block;
+  margin: 0 0 7px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fabric-muted);
+  letter-spacing: 0;
+}
+.fabric-module-refined .fabric-intro-copy h2 {
+  margin: 0;
+  font-size: clamp(23px, 2.1vw, 32px);
+  line-height: 1.35;
+  font-weight: 750;
+}
+.fabric-module-refined .fabric-intro-copy p {
+  margin: 9px 0 0;
+  max-width: 67ch;
+  color: var(--fabric-muted);
+  font-size: 13px;
+  line-height: 1.85;
+}
+.fabric-module-refined .fabric-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  margin: 0;
+  min-width: 0;
+}
+.fabric-module-refined .fabric-intro-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 0 1 auto;
+  min-height: 40px;
+  max-width: 100%;
+  margin: 0;
+  padding: 9px 13px;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: normal;
+  transition:
+    transform 0.16s ease,
+    border-color 0.16s ease,
+    background-color 0.16s ease;
+}
+.fabric-module-refined .fabric-intro-actions button:hover {
+  transform: translateY(-2px);
+}
+.fabric-module-refined .fabric-intro-actions button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+/* Tabs. No full-width clipped captions or card edges stuck to the navigation. */
+.fabric-module-refined .fabric-page-nav.fabric-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0 2px 9px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-inline: contain;
+  border-bottom: 1px solid var(--fabric-outline);
+  scrollbar-width: none;
+}
+.fabric-module-refined .fabric-page-nav.fabric-tabs::-webkit-scrollbar {
+  display: none;
+}
+.fabric-module-refined .fabric-page-nav.fabric-tabs button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 42px;
+  margin: 0;
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.55;
+  white-space: nowrap;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
+}
+.fabric-module-refined .fabric-page-nav.fabric-tabs button.active {
+  font-weight: 700;
+  background: rgba(111, 152, 117, 0.12);
+}
+.fabric-module-refined .fabric-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fabric-gap);
+  margin: 0;
+  padding: 6px 0 20px;
+  min-width: 0;
+  animation: fabric-fade-up 0.28s ease-out both;
+}
+
+/* Statistics are four distinct cards with consistent padding and spacing. */
+.fabric-module-refined .fabric-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+}
+.fabric-module-refined .fabric-stats > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  min-height: 122px;
+  gap: 7px;
+  margin: 0;
+  padding: 19px 20px;
+  border: 1px solid var(--fabric-outline);
+  border-radius: 13px;
+  background: var(--fabric-surface);
+  text-align: start;
+}
+.fabric-module-refined .fabric-stats > div > span {
+  display: block;
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.fabric-module-refined .fabric-stats > div > strong {
+  display: block;
+  font-size: clamp(22px, 2.2vw, 30px);
+  line-height: 1.2;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+.fabric-module-refined .fabric-stats > div > small {
+  display: block;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--fabric-muted);
+}
+
+/* Charts: two equally sized CARDS, never two infinitely tall columns. */
+.fabric-module-refined .fabric-overview-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 18px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+.fabric-module-refined .fabric-page-content .card,
+.fabric-module-refined .fabric-overview-charts > .card {
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: clamp(18px, 1.7vw, 24px);
+  border: 1px solid var(--fabric-outline);
+  border-radius: 14px;
+  background: var(--fabric-surface);
+}
+.fabric-module-refined .fabric-overview-charts > .fabric-chart-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 310px;
+  height: auto;
+  overflow: hidden;
+}
+.fabric-module-refined .fabric-chart-card > .card-heading,
+.fabric-module-refined .fabric-page-content .card-heading,
+.fabric-module-refined .fabric-page-content .list-toolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+  margin: 0;
+}
+.fabric-module-refined .fabric-chart-card .card-heading {
+  margin-bottom: 20px;
+}
+.fabric-module-refined .card-heading > div,
+.fabric-module-refined .list-toolbar > div {
+  min-width: 0;
+}
+.fabric-module-refined .card-heading :is(h3, p),
+.fabric-module-refined .list-toolbar :is(h3, p) {
+  margin-top: 0;
+}
+.fabric-module-refined .card-heading h3,
+.fabric-module-refined .list-toolbar h3 {
+  margin-bottom: 5px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.fabric-module-refined .card-heading p,
+.fabric-module-refined .list-toolbar p {
+  margin-bottom: 0;
+  color: var(--fabric-muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.fabric-module-refined .fabric-chart-card .chart-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.fabric-module-refined .fabric-chart-card .chart-title svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+.fabric-module-refined .fabric-chart-card .card-heading > :is(strong, span) {
+  flex: none;
+  max-width: 38%;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: end;
+}
+
+/* Movement chart: fixed height for axis, plot and labels. App button rules cannot expand it. */
+.fabric-module-refined .fabric-bar-chart {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  direction: ltr;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+  height: 196px;
+  min-height: 196px;
+  max-height: 196px;
+  margin: 0 0 10px;
+  padding: 0;
+}
+.fabric-module-refined .fabric-bar-axis {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 166px;
+  width: 32px;
+  margin: 0;
+  padding: 0;
+  text-align: end;
+  color: var(--fabric-muted);
+}
+.fabric-module-refined .fabric-bar-axis span {
+  font-size: 10px;
+  line-height: 1.2;
+}
+.fabric-module-refined .fabric-bar-plot {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  align-items: end;
+  gap: clamp(4px, 1vw, 11px);
+  position: relative;
+  width: 100%;
+  height: 196px;
+  min-height: 196px;
+  max-height: 196px;
+  margin: 0;
+  padding: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--fabric-outline) 0,
+    var(--fabric-outline) 1px,
+    transparent 1px,
+    transparent 55px
+  );
+  background-size: 100% 166px;
+  background-repeat: no-repeat;
+}
+.fabric-module-refined .fabric-bar-slot,
+.fabric-module-refined .fabric-bar-slot:is(:hover, :focus-visible) {
+  position: relative;
+  display: block;
+  overflow: visible;
+  align-self: stretch;
+  min-width: 0;
+  width: 100%;
+  height: 196px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  cursor: pointer;
+}
+.fabric-module-refined .fabric-bar-slot .fabric-bar {
+  display: block;
+  position: absolute;
+  bottom: 30px;
+  left: 18%;
+  right: 18%;
+  width: 64%;
+  max-height: 166px;
+  min-height: 0;
+  margin: 0;
+  border-radius: 6px 6px 2px 2px;
+  background: var(--fabric-accent);
+  opacity: 0.78;
+  transition:
+    height 0.3s ease,
+    opacity 0.18s ease;
+}
+.fabric-module-refined .fabric-bar-slot:is(:hover, :focus-visible) .fabric-bar {
+  opacity: 1;
+}
+.fabric-module-refined .fabric-bar-slot > small {
+  display: block;
+  position: absolute;
+  inset-inline: -5px;
+  bottom: 1px;
+  width: calc(100% + 10px);
+  height: 24px;
+  padding: 2px 0;
+  color: var(--fabric-muted);
+  font-size: 9px;
+  line-height: 1.3;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fabric-module-refined .fabric-chart-tooltip {
+  position: absolute;
+  inset-inline-start: 50%;
+  bottom: 80%;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  max-width: 180px;
+  gap: 3px;
+  padding: 8px 11px;
+  border: 1px solid var(--fabric-outline);
+  border-radius: 8px;
+  background: var(--card-bg, #18201c);
+  color: var(--text, #edf3ef);
+  font-size: 11px;
+  text-align: start;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.fabric-module-refined .fabric-chart-empty {
+  min-height: 18px;
+  margin: 0 0 10px;
+  color: var(--fabric-muted);
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Donut has a firm cap. The previous version inherited full-size SVG styles. */
+.fabric-module-refined .fabric-allocation-chart {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(16px, 2vw, 28px);
+  width: 100%;
+  min-height: 190px;
+  height: auto;
+  margin: 0 0 16px;
+  padding: 2px 0;
+}
+.fabric-module-refined .fabric-donut-wrap {
+  position: relative;
+  flex: 0 0 168px;
+  display: grid;
+  place-items: center;
+  width: 168px;
+  height: 168px;
+  min-width: 168px;
+  min-height: 168px;
+  max-width: 168px;
+  max-height: 168px;
+  margin: 0;
+  padding: 0;
+}
+.fabric-module-refined .fabric-donut-wrap > svg {
+  display: block;
+  position: relative;
+  z-index: 0;
+  width: 168px !important;
+  height: 168px !important;
+  min-width: 0 !important;
+  max-width: 168px !important;
+  min-height: 0 !important;
+  max-height: 168px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible;
+  transform: none;
+}
+.fabric-module-refined .fabric-donut-wrap > svg circle {
+  vector-effect: none;
+}
+.fabric-module-refined .fabric-donut-segment {
+  transition:
+    stroke-width 0.15s ease,
+    opacity 0.15s ease;
+  cursor: pointer;
+}
+.fabric-module-refined .fabric-donut-caption {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 0;
+  max-width: 168px;
+  padding: 26px;
+  text-align: center;
+  pointer-events: none;
+}
+.fabric-module-refined .fabric-donut-caption strong {
+  display: block;
+  width: 100%;
+  font-size: 23px;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.fabric-module-refined .fabric-donut-caption small {
+  color: var(--fabric-muted);
+  font-size: 10px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.fabric-module-refined .fabric-chart-legend {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  max-width: 240px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fabric-module-refined .fabric-chart-legend li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fabric-module-refined .fabric-chart-legend li button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: start;
+  box-shadow: none;
+  transform: none;
+}
+.fabric-module-refined .fabric-chart-legend li button:is(:hover, .is-active) {
+  background: rgba(122, 152, 127, 0.1);
+  border-color: var(--fabric-outline);
+}
+.fabric-module-refined .fabric-chart-legend i {
+  display: inline-block;
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+}
+.fabric-module-refined .fabric-chart-legend li span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.fabric-module-refined .fabric-chart-legend li strong {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.fabric-module-refined .fabric-chart-table {
+  margin-top: auto;
+  width: 100%;
+}
+.fabric-module-refined .fabric-chart-table summary {
+  width: fit-content;
+  max-width: 100%;
+  padding: 8px 0 2px;
+  color: var(--fabric-muted);
+  cursor: pointer;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.fabric-module-refined .fabric-chart-table .table-wrap {
+  margin-top: 10px;
+}
+
+/* Normal tab content, inventory, customer fabric, assignments, ledger. */
+.fabric-module-refined .fabric-page-content > .card {
+  display: block;
+  margin: 4px 0 8px;
+  padding: 24px;
+}
+.fabric-module-refined .fabric-page-content .list-toolbar {
+  margin-bottom: 20px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--fabric-outline);
+}
+.fabric-module-refined .fabric-page-content .list-toolbar h3 {
+  margin: 0 0 7px;
+}
+.fabric-module-refined .fabric-page-content .count {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 22px;
+  min-height: 22px;
+  margin-inline-start: 5px;
+  padding-inline: 5px;
+  border-radius: 6px;
+  background: rgba(125, 156, 132, 0.12);
+  font-size: 11px;
+}
+.fabric-module-refined .fabric-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 180px;
+  margin: 0;
+  padding: 26px 18px;
+  text-align: center;
+}
+.fabric-module-refined .fabric-empty > svg {
+  width: 30px;
+  height: 30px;
+  flex: none;
+  opacity: 0.72;
+}
+.fabric-module-refined .fabric-empty h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.6;
+}
+.fabric-module-refined .fabric-empty p {
+  max-width: 54ch;
+  margin: 0;
+  color: var(--fabric-muted);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.fabric-module-refined .table-wrap {
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+.fabric-module-refined .table-wrap table {
+  min-width: 600px;
+  width: 100%;
+}
+.fabric-module-refined .table-wrap th,
+.fabric-module-refined .table-wrap td {
+  padding: 12px 14px;
+  text-align: start;
+}
+.fabric-module-refined .fabric-ledger {
+  min-width: 0;
+  width: 100%;
+}
+.fabric-module-refined .fabric-ledger-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--fabric-outline);
+}
+.fabric-module-refined .fabric-ledger-row > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.fabric-module-refined .fabric-ledger-row > b {
+  flex: none;
+}
+.fabric-module-refined .fabric-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.fabric-module-refined .fabric-activity-card .card-heading {
+  margin-bottom: 16px;
+}
+
+@keyframes fabric-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1150px) {
+  .fabric-module-refined .fabric-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fabric-module-refined .fabric-intro-actions {
+    width: 100%;
+  }
+}
+@media (max-width: 900px) {
+  .fabric-module-refined .fabric-overview-charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fabric-module-refined .fabric-overview-charts > .fabric-chart-card {
+    min-height: 0;
+  }
+}
+@media (max-width: 620px) {
+  .fabric-module-refined {
+    padding: 14px;
+    gap: 16px;
+  }
+  .fabric-module-refined .fabric-intro-refined {
+    padding: 18px 16px;
+    gap: 17px;
+  }
+  .fabric-module-refined .fabric-intro-copy {
+    flex-basis: 100%;
+  }
+  .fabric-module-refined .fabric-intro-copy h2 {
+    font-size: 24px;
+  }
+  .fabric-module-refined .fabric-intro-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .fabric-module-refined .fabric-intro-actions button {
+    min-width: 0;
+  }
+  .fabric-module-refined .fabric-intro-actions button:first-child {
+    grid-column: 1 / -1;
+  }
+  .fabric-module-refined .fabric-stats {
+    gap: 9px;
+  }
+  .fabric-module-refined .fabric-stats > div {
+    min-height: 108px;
+    padding: 14px;
+  }
+  .fabric-module-refined .fabric-page-content > .card,
+  .fabric-module-refined .fabric-page-content .fabric-chart-card {
+    padding: 17px;
+  }
+  .fabric-module-refined .fabric-allocation-chart {
+    flex-wrap: wrap;
+    min-height: 0;
+    gap: 12px;
+  }
+  .fabric-module-refined .fabric-chart-legend {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+  .fabric-module-refined .fabric-chart-legend li button {
+    min-height: 32px;
+  }
+  .fabric-module-refined .fabric-empty {
+    min-height: 155px;
+    padding: 22px 12px;
+  }
+  .fabric-module-refined .fabric-page-content .list-toolbar {
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 390px) {
+  .fabric-module-refined .fabric-stats {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fabric-module-refined .fabric-intro-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fabric-module-refined .fabric-intro-actions button:first-child {
+    grid-column: auto;
+  }
+  .fabric-module-refined .fabric-bar-chart {
+    gap: 5px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fabric-module-refined .fabric-intro-refined,
+  .fabric-module-refined .fabric-page-content {
+    animation: none;
+  }
+  .fabric-module-refined .fabric-bar-slot .fabric-bar,
+  .fabric-module-refined .fabric-intro-actions button,
+  .fabric-module-refined .fabric-page-nav button {
+    transition: none;
+  }
+  .fabric-module-refined .fabric-intro-actions button:hover {
+    transform: none;
+  }
+}
+
+/* v3: Balanced chart cards and ledger rows modeled after compact input surfaces. */
+.fabric-module-refined .fabric-overview-charts {
+  gap: clamp(16px, 1.7vw, 22px);
+  padding-block: 4px 8px;
+  align-items: stretch;
+}
+.fabric-module-refined .fabric-overview-charts > .fabric-chart-card {
+  min-height: 340px;
+  padding: clamp(18px, 2vw, 26px);
+  gap: 0;
+}
+.fabric-module-refined .fabric-chart-card > .card-heading {
+  gap: 16px;
+  padding-bottom: 17px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--fabric-outline);
+}
+.fabric-module-refined .fabric-chart-card .card-heading > div {
+  flex: 1 1 auto;
+}
+.fabric-module-refined .fabric-bar-chart {
+  margin-block: 10px 14px;
+}
+.fabric-module-refined .fabric-chart-empty {
+  margin: 0 0 12px;
+}
+.fabric-module-refined .fabric-allocation-chart {
+  gap: clamp(16px, 2vw, 26px);
+  padding-block: 12px;
+  margin-bottom: 14px;
+}
+.fabric-module-refined .fabric-chart-legend {
+  gap: 8px;
+}
+.fabric-module-refined .fabric-chart-table {
+  border-top: 1px solid var(--fabric-outline);
+  padding-top: 12px;
+}
+.fabric-module-refined .fabric-chart-table summary {
+  padding-block: 3px;
+}
+
+/* Fabric transaction ledger: distinct, readable compact transaction tiles. */
+.fabric-module-refined .fabric-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 0 2px;
+  margin: 0;
+}
+.fabric-module-refined .fabric-ledger-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 70px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--fabric-outline);
+  border-radius: 12px;
+  background: var(--fabric-surface);
+  color: inherit;
+  text-align: start;
+  direction: inherit;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+.fabric-module-refined .fabric-ledger-row:hover {
+  border-color: var(--fabric-accent);
+  background: rgba(116, 155, 123, 0.075);
+  transform: translateY(-1px);
+}
+.fabric-module-refined .fabric-ledger-row > .fabric-ledger-icon {
+  flex: 0 0 42px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(126, 174, 135, 0.16);
+  border-radius: 11px;
+  background: rgba(111, 152, 117, 0.14);
+  color: var(--fabric-accent);
+}
+.fabric-module-refined .fabric-ledger-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+.fabric-module-refined .fabric-ledger-row > .fabric-ledger-details {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  text-align: start;
+}
+.fabric-module-refined .fabric-ledger-primary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px 11px;
+  width: 100%;
+  min-width: 0;
+  line-height: 1.55;
+}
+.fabric-module-refined .fabric-ledger-type {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.fabric-module-refined .fabric-ledger-fabric {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.55;
+  color: var(--fabric-muted);
+  overflow-wrap: anywhere;
+}
+.fabric-module-refined .fabric-ledger-date {
+  display: block;
+  margin: 0;
+  padding: 0;
+  color: var(--fabric-muted);
+  font-size: 11px;
+  line-height: 1.5;
+  unicode-bidi: plaintext;
+}
+.fabric-module-refined .fabric-ledger-row > .fabric-ledger-amount {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 4px 6px;
+  max-width: 38%;
+  margin-inline-start: auto;
+  padding-inline-start: 10px;
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
+  text-align: end;
+}
+.fabric-module-refined .fabric-ledger-amount small {
+  font-size: 12px;
+  color: var(--fabric-muted);
+  font-weight: 500;
+}
+@media (max-width: 620px) {
+  .fabric-module-refined .fabric-overview-charts > .fabric-chart-card {
+    min-height: 0;
+    padding: 17px;
+  }
+  .fabric-module-refined .fabric-ledger-row {
+    min-height: 66px;
+    gap: 10px;
+    padding: 12px;
+  }
+  .fabric-module-refined .fabric-ledger-row > .fabric-ledger-icon {
+    flex-basis: 36px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+  .fabric-module-refined .fabric-ledger-row > .fabric-ledger-amount {
+    max-width: 40%;
+    padding-inline-start: 4px;
+    font-size: 14px;
+  }
+  .fabric-module-refined .fabric-ledger-type {
+    font-size: 12px;
+  }
+  .fabric-module-refined .fabric-ledger-fabric {
+    font-size: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fabric-module-refined .fabric-ledger-row {
+    transition: none;
+  }
+  .fabric-module-refined .fabric-ledger-row:hover {
+    transform: none;
+  }
+}
