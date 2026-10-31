@@ -1,21 +1,74 @@
-import {useSyncExternalStore} from 'react';
-export type Language='en'|'fa'|'ps';
-const KEY='thread-ledger-language';
+import { useSyncExternalStore } from "react";
+export type Language = "en" | "fa" | "ps";
+const KEY = "thread-ledger-language";
 
-const valid=(v:unknown):v is Language=>v==='en'||v==='fa'||v==='ps';
-let current:Language='en';
-try{const saved=localStorage.getItem(KEY);if(valid(saved))current=saved}catch{/* Browser storage may be unavailable. */}
-const listeners=new Set<()=>void>();
-function apply(){if(typeof document!=='undefined'){document.documentElement.lang=current;document.documentElement.dir=current==='en'?'ltr':'rtl';document.title=current==='fa'?'مدیریت خیاطی':current==='ps'?'د خیاطۍ مدیریت':'Tailor Studio | Tailoring Management'}}
+const valid = (v: unknown): v is Language =>
+  v === "en" || v === "fa" || v === "ps";
+let current: Language = "en";
+try {
+  const saved = localStorage.getItem(KEY);
+  if (valid(saved)) current = saved;
+} catch {
+  /* Browser storage may be unavailable. */
+}
+const listeners = new Set<() => void>();
+function apply() {
+  if (typeof document !== "undefined") {
+    document.documentElement.lang = current;
+    document.documentElement.dir = current === "en" ? "ltr" : "rtl";
+    document.title =
+      current === "fa"
+        ? "مدیریت خیاطی"
+        : current === "ps"
+          ? "د خیاطۍ مدیریت"
+          : "Tailor Studio | Tailoring Management";
+  }
+}
 apply();
-export const language=()=>current;
-export function setLanguage(value:string){if(!valid(value))return;try{localStorage.setItem(KEY,value);}catch{/* Keep language switching usable if storage is unavailable. */}if(current!==value){current=value;apply();listeners.forEach(f=>f())}}
-export function useLanguage(){return useSyncExternalStore(cb=>{listeners.add(cb);return()=>{listeners.delete(cb)}},language,()=> 'en' as Language)}
-if(typeof window!=='undefined')window.addEventListener('storage',e=>{if(e.key===KEY&&valid(e.newValue)&&e.newValue!==current){current=e.newValue;apply();listeners.forEach(f=>f())}});
-export const locale=()=>current==='fa'?'fa-AF-u-ca-gregory':current==='ps'?'ps-AF-u-ca-gregory':'en-GB';
-export const formatNumber=(n:number)=>new Intl.NumberFormat(current==='en'?'en-GB':'fa-AF').format(n);
-export const translations:Record<string,[string,string]>={};
-const rows=`
+export const language = () => current;
+export function setLanguage(value: string) {
+  if (!valid(value)) return;
+  try {
+    localStorage.setItem(KEY, value);
+  } catch {
+    /* Keep language switching usable if storage is unavailable. */
+  }
+  if (current !== value) {
+    current = value;
+    apply();
+    listeners.forEach((f) => f());
+  }
+}
+export function useLanguage() {
+  return useSyncExternalStore(
+    (cb) => {
+      listeners.add(cb);
+      return () => {
+        listeners.delete(cb);
+      };
+    },
+    language,
+    () => "en" as Language,
+  );
+}
+if (typeof window !== "undefined")
+  window.addEventListener("storage", (e) => {
+    if (e.key === KEY && valid(e.newValue) && e.newValue !== current) {
+      current = e.newValue;
+      apply();
+      listeners.forEach((f) => f());
+    }
+  });
+export const locale = () =>
+  current === "fa"
+    ? "fa-AF-u-ca-gregory"
+    : current === "ps"
+      ? "ps-AF-u-ca-gregory"
+      : "en-GB";
+export const formatNumber = (n: number) =>
+  new Intl.NumberFormat(current === "en" ? "en-GB" : "fa-AF").format(n);
+export const translations: Record<string, [string, string]> = {};
+const rows = `
 Search workspace|جستجو در فضای کاری|په کاري ځای کې لټون
 Search customers, orders or payments…|جستجوی مشتریان، سفارش‌ها یا پرداخت‌ها…|پېرودونکي، فرمایشونه یا تادیات ولټوئ…
 No results found|نتیجه‌ای یافت نشد|پایلې ونه موندل شوې
@@ -458,14 +511,219 @@ Signup is closed. The owner account already exists.|ثبت‌نام بسته ا�
 A valid server setup key is required for first signup.|برای اولین ثبت‌نام، کلید معتبر راه‌اندازی سرور لازم است.|د لومړۍ نوملیکنې لپاره د سرور د تنظیم سمه کیلي اړینه ده.
 Too many attempts. Try again in 15 minutes.|تلاش‌های بیش از حد. ۱۵ دقیقه بعد دوباره تلاش کنید.|هڅې ډېرې شوې. ۱۵ دقیقې وروسته بیا هڅه وکړئ.
 Incorrect username or password.|نام کاربری یا رمز عبور نادرست است.|کارن نوم یا پټنوم ناسم دی.
+Fabric Management|مدیریت تکه|د ټوکر مدیریت
+TRACEABLE FABRIC WORKSPACE|محیط مدیریت قابل پیگیری تکه|د ټوکر د تعقیب کاري ځای
+Know where every piece of fabric is, from receipt to return.|جای هر تکه پارچه را از دریافت تا برگشت بدانید.|د هر ټوکر ځای له ترلاسه کولو تر بېرته ورکولو پورې وپېژنئ.
+Follow every piece from receiving to cutting, return, or waste.|هر تکه را از دریافت تا برش، برگشت یا ضایعات پیگیری کنید.|هره ټوټه له ترلاسه کولو تر پرې کولو، بېرته ورکولو یا ضایعاتو پورې تعقیب کړئ.
+Shop fabric available|تکه موجود دکان|په دوکان کې موجود ټوکر
+Customer fabric held|تکه نزد مشتری|د پېرودونکي ساتل شوی ټوکر
+Reserved for orders|رزرو شده برای سفارش‌ها|د سپارښتنو لپاره ساتل شوی
+Used and wasted|مصرف و ضایعات|کارول شوی او ضایع شوی
+Units ready for orders|واحد آماده برای سفارش‌ها|د سپارښتنو لپاره چمتو واحدونه
+Units to return or use|واحد برای برگشت یا استفاده|د بېرته ورکولو یا کارولو واحدونه
+Issued for cutting|تحویل‌شده برای برش|د پرې کولو لپاره سپارل شوی
+Complete ledger history|تاریخچه کامل دفتر|بشپړه دفتري مخینه
+Receive fabric|دریافت تکه|ټوکر ترلاسه کړئ
+Fabric actions|عملیات تکه|د ټوکر کړنې
+Cancel|لغو|لغوه کول
+Close actions|بستن عملیات|کړنې بندې کړئ
+Add fabric to registry|افزودن تکه به فهرست|فهرست ته ټوکر زیات کړئ
+Receive a fabric lot|دریافت یک محموله تکه|د ټوکر یوه جوپه ترلاسه کړئ
+Save record|ذخیره ریکارد|ریکارډ خوندي کړئ
+Code|کد|کوډ
+Fabric name|نام تکه|د ټوکر نوم
+Fabric type|نوع تکه|د ټوکر ډول
+Type|نوع|ډول
+Color|رنگ|رنګ
+Quality|کیفیت|کیفیت
+Unit|واحد|واحد
+Purchase cost (AFN)|هزینه خرید (افغانی)|د پیرود لګښت (افغانۍ)
+Selling price (AFN)|قیمت فروش (افغانی)|د پلور بیه (افغانۍ)
+Cotton, silk, wool…|نخ، ابریشم، پشم…|پنبه، ورېښم، وړۍ…
+Fabric|تکه|ټوکر
+Select a fabric|تکه را انتخاب کنید|ټوکر وټاکئ
+Ownership|مالکیت|ملکیت
+Shop-owned fabric|تکه دکان|د دوکان ټوکر
+Customer-owned fabric|تکه مشتری|د پېرودونکي ټوکر
+Customer (for customer fabric)|مشتری (برای تکه مشتری)|پېرودونکی (د پېرودونکي ټوکر لپاره)
+Select a customer|مشتری را انتخاب کنید|پېرودونکی وټاکئ
+Quantity|تعداد|شمېر
+Use catalog unit|استفاده از واحد فهرست|د فهرست واحد وکاروئ
+Supplier|تأمین‌کننده|چمتو کوونکی
+Notes|یادداشت‌ها|یادښتونه
+Overview|نمای کلی|لنډه کتنه
+Inventory|موجودی|زېرمه
+Customer Fabrics|تکه‌های مشتری|د پېرودونکي ټوکرونه
+Customer fabrics|تکه‌های مشتری|د پېرودونکي ټوکرونه
+meter|متر|متر
+yard|یارد|یارد
+gaz|گز|ګز
+piece|قلم|ټوټه
+Assignments|تخصیص‌ها|سپارنې
+Ledger|دفتر معاملات|د راکړې ورکړې دفتر
+Fabric flow|جریان تکه|د ټوکر بهیر
+A clear chain of custody for shop stock and customer pieces.|زنجیره روشن نگهداری برای موجودی دکان و تکه‌های مشتری.|د دوکان زېرمو او د پېرودونکي ټوټو روښانه تعقیبي لړۍ.
+Fabric movement|حرکت تکه|د ټوکر حرکت
+Units recorded in the last 7 days.|واحدهای ثبت‌شده در ۷ روز گذشته.|په تېرو ۷ ورځو کې ثبت شوي واحدونه.
+Units moved|واحدهای جابه‌جا‌شده|لېږدول شوي واحدونه
+No fabric movement yet|هنوز حرکت تکه‌ای نیست|لا د ټوکر حرکت نشته
+View data table|مشاهده جدول داده‌ها|د معلوماتو جدول وګورئ
+Date|تاریخ|نېټه
+Fabric allocation|تخصیص تکه|د ټوکر وېش
+Current stock allocation|تخصیص موجودی فعلی|د اوسنۍ زېرمې وېش
+Units|واحدها|واحدونه
+Category|دسته‌بندی|وېشنيزه
+Shop available|موجودی دکان|د دوکان موجوده زېرمه
+Customer held|نزد مشتری|د پېرودونکي سره ساتل شوی
+Lots received|محموله‌های دریافت‌شده|ترلاسه شوې جوپې
+Order assignments|تخصیص سفارش‌ها|د سپارښتنو سپارنې
+Units consumed|واحد مصرف‌شده|کارول شوي واحدونه
+Units returned|واحد برگشت‌شده|بېرته ورکړل شوي واحدونه
+Recent fabric activity|فعالیت اخیر تکه|د ټوکر وروستي فعالیتونه
+The latest movement across every lot.|آخرین حرکت هر محموله.|د هرې جوپې وروستی حرکت.
+Fabric inventory|موجودی تکه|د ټوکر زېرمه
+Shop-owned stock available for sale or tailoring orders.|موجودی دکان برای فروش یا سفارش‌های دوخت.|د پلور یا ګنډلو سپارښتنو لپاره د دوکان زېرمه.
+Fabric lot|محموله تکه|د ټوکر جوپه
+Owner|مالک|مالک
+Available|موجود|موجود
+Reserved|رزرو|ساتل شوی
+Used|مصرف‌شده|کارول شوی
+Received|دریافت‌شده|ترلاسه شوی
+Return|برگشت|بېرته ورکړئ
+Quantity to return|تعداد برای برگشت|د بېرته ورکولو شمېر
+Quantity to release|تعداد برای آزادسازی|د آزادولو شمېر
+Release|آزادسازی|آزادول
+Keep each customer’s remaining fabric separate and returnable.|باقی‌مانده تکه هر مشتری را جدا و قابل برگشت نگه دارید.|د هر پېرودونکي پاتې ټوکر جلا او د بېرته ورکولو وړ وساتئ.
+Fabric assignments|تخصیص تکه|د ټوکر سپارنې
+Reserve fabric before cutting, then record actual use and waste.|پیش از برش تکه را رزرو کنید و سپس مصرف واقعی و ضایعات را ثبت کنید.|له پرې کولو مخکې ټوکر وساتئ، بیا اصلي کارول او ضایعات ثبت کړئ.
+Waste|ضایعات|ضایعات
+Record use|ثبت مصرف|مصرف ثبت کړئ
+Quantity used|تعداد مصرف‌شده|د کارول شوي شمېر
+Waste quantity|تعداد ضایعات|د ضایعاتو شمېر
+No fabric lots yet|هنوز محموله تکه‌ای نیست|لا د ټوکر جوپې نشته
+Receive shop or customer fabric to start its traceable ledger.|برای آغاز دفتر قابل پیگیری، تکه دکان یا مشتری را دریافت کنید.|د تعقیبي دفتر د پیل لپاره د دوکان یا پېرودونکي ټوکر ترلاسه کړئ.
+No fabric assignments yet|هنوز تخصیص تکه‌ای نیست|لا د ټوکر سپارنې نشته
+Assignments connect a fabric lot to a tailoring order before cutting.|تخصیص، محموله تکه را پیش از برش به سفارش دوخت وصل می‌کند.|سپارنه د پرې کولو مخکې د ټوکر جوپه له ګنډلو سپارښتنې سره نښلوي.
+Fabric transaction ledger|دفتر معاملات تکه|د ټوکر د راکړې ورکړې دفتر
+Every receipt, reservation, use, return, and waste event remains visible.|هر دریافت، رزرو، مصرف، برگشت و ضایعات قابل مشاهده می‌ماند.|هره ترلاسه کول، ساتل، کارول، بېرته ورکول او ضایعات ښکاره پاتې کېږي.
+No fabric transactions yet|هنوز معامله‌ای برای تکه نیست|لا د ټوکر راکړې ورکړې نشته
+The ledger will show every movement after the first lot is received.|پس از دریافت نخستین محموله، دفتر همه حرکت‌ها را نشان می‌دهد.|د لومړۍ جوپې له ترلاسه کولو وروسته دفتر به ټول حرکتونه وښيي.
+received|دریافت|ترلاسه
+reserved|رزرو|ساتل شوی
+consumed|مصرف|کارول شوی
+waste|ضایعات|ضایعات
+returned|برگشت|بېرته ورکړل شوی
+released|آزادشده|بېرته آزاد شوی
+Partially released|قسمتی آزادشده|یوه برخه آزاده شوې
+Partially consumed|قسمتی مصرف‌شده|یوه برخه کارول شوې
+Released|آزادشده|خوشې شوی
+Consumed|مصرف‌شده|کارول شوی
+Reserved|رزرو شده|ساتل شوی
+Record not found|ریکارد یافت نشد|ریکارډ ونه موندل شو
+Fabric record saved.|ریکارد تکه ذخیره شد.|د ټوکر ریکارډ خوندي شو.
+A fabric code with this value already exists.|کد تکه با این مقدار از قبل موجود است.|د ټوکر دا کوډ مخکې موجود دی.
+Choose the customer who owns this fabric.|مشتری مالک این تکه را انتخاب کنید.|هغه پېرودونکی وټاکئ چې د دې ټوکر مالک دی.
+Shop-owned fabric cannot be linked to a customer.|تکه دکان نمی‌تواند به مشتری وصل شود.|د دوکان ټوکر له پېرودونکي سره نه شي تړل کېدای.
+The requested fabric quantity is not available.|تعداد درخواستی تکه موجود نیست.|د ټوکر غوښتل شوی شمېر موجود نه دی.
+Customer-owned fabric must be assigned to that customer’s order.|تکه مشتری باید به سفارش همان مشتری تخصیص شود.|د پېرودونکي ټوکر باید د هماغه پېرودونکي سپارښتنې ته وسپارل شي.
+Consumed and wasted fabric cannot exceed the reserved quantity.|مصرف و ضایعات نمی‌تواند از مقدار رزرو بیشتر باشد.|کارول شوی او ضایع شوی ټوکر له ساتل شوي مقدار څخه زیاتېدای نه شي.
+Only customer-owned fabric can be returned through this ledger.|از طریق این دفتر فقط تکه مشتری قابل برگشت است.|په دې دفتر کې یوازې د پېرودونکي ټوکر بېرته ورکول کېدای شي.
+Return quantity cannot exceed the available customer fabric.|تعداد برگشت نمی‌تواند از تکه موجود مشتری بیشتر باشد.|د بېرته ورکولو شمېر د پېرودونکي له موجود ټوکر څخه زیاتېدای نه شي.
+Released fabric cannot exceed the unconsumed reservation.|تکه آزادشده نمی‌تواند از رزرو مصرف‌نشده بیشتر باشد.|آزاد شوی ټوکر له نه کارول شوې ساتنې څخه زیاتېدای نه شي.
+Assign fabric to an order|تخصیص تکه به سفارش|د سپارښتنې لپاره ټوکر وسپارئ
+Select available fabric|تکه موجود را انتخاب کنید|موجود ټوکر وټاکئ
+Select an order|سفارش را انتخاب کنید|سپارښتنه وټاکئ
 `;
-for(const line of rows.trim().split('\n')){if(!line.trim())continue;const [key,fa,ps]=line.split('|');if(!key||!fa||!ps)throw new Error('Incomplete translation: '+key);translations[key]=[fa,ps]}
-export function t(value:string|undefined,params:Record<string,string|number>={},lang:Language=current):string{
- if(value===undefined)return '';const key=value.trim().replace(/\s+/g,' ');const translated=lang==='en'?key:translations[key]?.[lang==='fa'?0:1]??key;
- return value.slice(0,value.length-value.trimStart().length)+translated.replace(/\{(\w+)\}/g,(_,k)=>String(params[k]??`{${k}}`))+value.slice(value.trimEnd().length);
+for (const line of rows.trim().split("\n")) {
+  if (!line.trim()) continue;
+  const [key, fa, ps] = line.split("|");
+  if (!key || !fa || !ps) throw new Error("Incomplete translation: " + key);
+  translations[key] = [fa, ps];
+}
+export function t(
+  value: string | undefined,
+  params: Record<string, string | number> = {},
+  lang: Language = current,
+): string {
+  if (value === undefined) return "";
+  const key = value.trim().replace(/\s+/g, " ");
+  const translated =
+    lang === "en" ? key : (translations[key]?.[lang === "fa" ? 0 : 1] ?? key);
+  return (
+    value.slice(0, value.length - value.trimStart().length) +
+    translated.replace(/\{(\w+)\}/g, (_, k) => String(params[k] ?? `{${k}}`)) +
+    value.slice(value.trimEnd().length)
+  );
 }
 
-const months={fa:['جنوری','فبروری','مارچ','اپریل','می','جون','جولای','اگست','سپتمبر','اکتوبر','نومبر','دسمبر'],ps:['جنوري','فبروري','مارچ','اپرېل','مې','جون','جولای','اګست','سپتمبر','اکتوبر','نومبر','دسمبر']};
-const weekdays={fa:['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'],ps:['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه']};
-export function formatDate(value:string|Date,withWeekday=false){const d=value instanceof Date?value:new Date(value.includes('T')?value:value+'T12:00:00');if(Number.isNaN(d.getTime()))return '';if(current==='en')return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',...(withWeekday?{weekday:'short' as const}:{})});return (withWeekday?weekdays[current][d.getDay()]+'، ':'')+formatNumber(d.getDate())+' '+months[current][d.getMonth()]+' '+String(d.getFullYear()).replace(/\d/g,n=>'۰۱۲۳۴۵۶۷۸۹'[Number(n)])}
-export function formatTimestamp(value:string|Date){const d=value instanceof Date?value:new Date(value);const time=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});return formatDate(d)+'، '+(current==='en'?time:time.replace(/\d/g,n=>'۰۱۲۳۴۵۶۷۸۹'[Number(n)]))}
+const months = {
+  fa: [
+    "جنوری",
+    "فبروری",
+    "مارچ",
+    "اپریل",
+    "می",
+    "جون",
+    "جولای",
+    "اگست",
+    "سپتمبر",
+    "اکتوبر",
+    "نومبر",
+    "دسمبر",
+  ],
+  ps: [
+    "جنوري",
+    "فبروري",
+    "مارچ",
+    "اپرېل",
+    "مې",
+    "جون",
+    "جولای",
+    "اګست",
+    "سپتمبر",
+    "اکتوبر",
+    "نومبر",
+    "دسمبر",
+  ],
+};
+const weekdays = {
+  fa: ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"],
+  ps: ["یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه"],
+};
+export function formatDate(value: string | Date, withWeekday = false) {
+  const d =
+    value instanceof Date
+      ? value
+      : new Date(value.includes("T") ? value : value + "T12:00:00");
+  if (Number.isNaN(d.getTime())) return "";
+  if (current === "en")
+    return d.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      ...(withWeekday ? { weekday: "short" as const } : {}),
+    });
+  return (
+    (withWeekday ? weekdays[current][d.getDay()] + "، " : "") +
+    formatNumber(d.getDate()) +
+    " " +
+    months[current][d.getMonth()] +
+    " " +
+    String(d.getFullYear()).replace(/\d/g, (n) => "۰۱۲۳۴۵۶۷۸۹"[Number(n)])
+  );
+}
+export function formatTimestamp(value: string | Date) {
+  const d = value instanceof Date ? value : new Date(value);
+  const time = d.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  return (
+    formatDate(d) +
+    "، " +
+    (current === "en"
+      ? time
+      : time.replace(/\d/g, (n) => "۰۱۲۳۴۵۶۷۸۹"[Number(n)]))
+  );
+}
