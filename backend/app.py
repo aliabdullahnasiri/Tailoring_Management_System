@@ -138,6 +138,66 @@ settings = Table(
     Column("id", Integer, primary_key=True),
     Column("value", Text, nullable=False),
 )
+fabric_catalog = Table(
+    "fabric_catalog", meta,
+    Column("id", String, primary_key=True),
+    Column("code", String, unique=True, nullable=False),
+    Column("name", String, nullable=False),
+    Column("fabric_type", String, nullable=False),
+    Column("color", String, nullable=False),
+    Column("quality", String, nullable=False),
+    Column("unit", String, nullable=False),
+    Column("default_purchase_cost", Integer, nullable=False),
+    Column("default_selling_price", Integer, nullable=False),
+    Column("notes", Text, nullable=False),
+    Column("created", String, nullable=False),
+)
+fabric_lots = Table(
+    "fabric_lots", meta,
+    Column("id", String, primary_key=True),
+    Column("catalog_id", ForeignKey("fabric_catalog.id"), nullable=False),
+    Column("owner_type", String, nullable=False),
+    Column("customer_id", ForeignKey("customers.id")),
+    Column("supplier", String, nullable=False),
+    Column("received", String, nullable=False),
+    Column("quantity_received", Integer, nullable=False),
+    Column("quantity_available", Integer, nullable=False),
+    Column("quantity_reserved", Integer, nullable=False),
+    Column("quantity_consumed", Integer, nullable=False),
+    Column("quantity_wasted", Integer, nullable=False),
+    Column("quantity_returned", Integer, nullable=False),
+    Column("unit", String, nullable=False),
+    Column("purchase_cost", Integer, nullable=False),
+    Column("selling_price", Integer, nullable=False),
+    Column("notes", Text, nullable=False),
+)
+fabric_assignments = Table(
+    "fabric_assignments", meta,
+    Column("id", String, primary_key=True),
+    Column("lot_id", ForeignKey("fabric_lots.id"), nullable=False),
+    Column("order_id", ForeignKey("orders.id"), nullable=False),
+    Column("quantity_reserved", Integer, nullable=False),
+    Column("quantity_consumed", Integer, nullable=False),
+    Column("quantity_wasted", Integer, nullable=False),
+    Column("quantity_released", Integer, nullable=False),
+    Column("status", String, nullable=False),
+    Column("notes", Text, nullable=False),
+    Column("created", String, nullable=False),
+)
+fabric_transactions = Table(
+    "fabric_transactions", meta,
+    Column("id", String, primary_key=True),
+    Column("lot_id", ForeignKey("fabric_lots.id"), nullable=False),
+    Column("assignment_id", ForeignKey("fabric_assignments.id")),
+    Column("order_id", ForeignKey("orders.id")),
+    Column("customer_id", ForeignKey("customers.id")),
+    Column("type", String, nullable=False),
+    Column("quantity", Integer, nullable=False),
+    Column("unit", String, nullable=False),
+    Column("created", String, nullable=False),
+    Column("request_id", String, unique=True, nullable=False),
+    Column("notes", Text, nullable=False),
+)
 lock = threading.RLock()
 
 
@@ -346,6 +406,62 @@ class SettingsIn(Strict):
     print_measurements: bool = False
 
 
+FabricOwner = Literal["Shop", "Customer"]
+FabricUnit = Literal["meter", "yard", "gaz", "piece"]
+
+
+class FabricCatalogIn(Strict):
+    code: str = Field(min_length=1, max_length=40)
+    name: str = Field(min_length=1, max_length=120)
+    fabric_type: str = Field(min_length=1, max_length=80)
+    color: str = Field(default="", max_length=60)
+    quality: str = Field(default="", max_length=80)
+    unit: FabricUnit = "meter"
+    default_purchase_cost: int = Field(default=0, ge=0, le=100000000, strict=True)
+    default_selling_price: int = Field(default=0, ge=0, le=100000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+
+
+class FabricLotIn(Strict):
+    catalog_id: str
+    owner_type: FabricOwner
+    customer_id: str | None = None
+    supplier: str = Field(default="", max_length=120)
+    quantity: int = Field(gt=0, le=1000000, strict=True)
+    unit: FabricUnit | None = None
+    purchase_cost: int | None = Field(default=None, ge=0, le=100000000, strict=True)
+    selling_price: int | None = Field(default=None, ge=0, le=100000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+    request_id: str = Field(min_length=10, max_length=100)
+
+
+class FabricAssignmentIn(Strict):
+    lot_id: str
+    order_id: str
+    quantity: int = Field(gt=0, le=1000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+    request_id: str = Field(min_length=10, max_length=100)
+
+
+class FabricConsumptionIn(Strict):
+    quantity: int = Field(gt=0, le=1000000, strict=True)
+    waste: int = Field(default=0, ge=0, le=1000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+    request_id: str = Field(min_length=10, max_length=100)
+
+
+class FabricReturnIn(Strict):
+    quantity: int = Field(gt=0, le=1000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+    request_id: str = Field(min_length=10, max_length=100)
+
+
+class FabricReleaseIn(Strict):
+    quantity: int = Field(gt=0, le=1000000, strict=True)
+    notes: str = Field(default="", max_length=2000)
+    request_id: str = Field(min_length=10, max_length=100)
+
+
 def paid(c, order_id):
     return sum(
         r.amount
@@ -375,6 +491,12 @@ def state():
             "history": rows(c, history),
             "settings": json.loads(get(c, settings, 1)["value"]),
             "fields": FIELDS,
+            "fabrics": {
+                "catalog": rows(c, fabric_catalog),
+                "lots": rows(c, fabric_lots),
+                "assignments": rows(c, fabric_assignments),
+                "transactions": rows(c, fabric_transactions),
+            },
         }
 
 
@@ -584,6 +706,217 @@ def reverse_payment(id: str, x: ReversalIn):
         return d
 
 
+@app.get("/api/fabrics/state")
+def fabric_state():
+    with lock, engine.connect() as c:
+        return {
+            "catalog": rows(c, fabric_catalog),
+            "lots": rows(c, fabric_lots),
+            "assignments": rows(c, fabric_assignments),
+            "transactions": rows(c, fabric_transactions),
+        }
+
+
+@app.post("/api/fabrics/catalog")
+def create_fabric_catalog(x: FabricCatalogIn):
+    with lock, engine.begin() as c:
+        if c.execute(select(fabric_catalog).where(fabric_catalog.c.code == x.code)).first():
+            raise HTTPException(409, "A fabric code with this value already exists.")
+        d = dict(id=uid(), created=now(), **x.model_dump())
+        c.execute(fabric_catalog.insert().values(**d))
+        return d
+
+
+@app.post("/api/fabrics/lots")
+def receive_fabric(x: FabricLotIn):
+    with lock, engine.begin() as c:
+        catalog = get(c, fabric_catalog, x.catalog_id)
+        if x.owner_type == "Customer":
+            if not x.customer_id:
+                raise HTTPException(400, "Choose the customer who owns this fabric.")
+            get(c, customers, x.customer_id)
+        elif x.customer_id:
+            raise HTTPException(400, "Shop-owned fabric cannot be linked to a customer.")
+        existing = c.execute(select(fabric_transactions).where(fabric_transactions.c.request_id == x.request_id)).mappings().first()
+        if existing:
+            if (
+                existing["type"] != "received"
+                or existing["quantity"] != x.quantity
+                or existing["customer_id"] != x.customer_id
+            ):
+                raise HTTPException(409, "This fabric request was already used with different details.")
+            return get(c, fabric_lots, existing["lot_id"])
+        d = dict(
+            id=uid(), catalog_id=x.catalog_id, owner_type=x.owner_type,
+            customer_id=x.customer_id, supplier=x.supplier, received=now(),
+            quantity_received=x.quantity, quantity_available=x.quantity,
+            quantity_reserved=0, quantity_consumed=0, quantity_wasted=0,
+            quantity_returned=0, unit=x.unit or catalog["unit"],
+            purchase_cost=catalog["default_purchase_cost"] if x.purchase_cost is None else x.purchase_cost,
+            selling_price=catalog["default_selling_price"] if x.selling_price is None else x.selling_price,
+            notes=x.notes,
+        )
+        c.execute(fabric_lots.insert().values(**d))
+        c.execute(fabric_transactions.insert().values(
+            id=uid(), lot_id=d["id"], assignment_id=None, order_id=None,
+            customer_id=d["customer_id"], type="received", quantity=x.quantity,
+            unit=d["unit"], created=d["received"], request_id=x.request_id,
+            notes=x.notes,
+        ))
+        return d
+
+
+@app.post("/api/fabrics/assignments")
+def assign_fabric(x: FabricAssignmentIn):
+    with lock, engine.begin() as c:
+        existing = c.execute(select(fabric_transactions).where(fabric_transactions.c.request_id == x.request_id)).mappings().first()
+        if existing:
+            if (
+                existing["type"] != "reserved"
+                or existing["lot_id"] != x.lot_id
+                or existing["order_id"] != x.order_id
+                or existing["quantity"] != x.quantity
+            ):
+                raise HTTPException(409, "This fabric request was already used with different details.")
+            return get(c, fabric_assignments, existing["assignment_id"])
+        lot = get(c, fabric_lots, x.lot_id)
+        order = get(c, orders, x.order_id)
+        if lot["owner_type"] == "Customer" and lot["customer_id"] != order["customer_id"]:
+            raise HTTPException(400, "Customer-owned fabric must be assigned to that customer's order.")
+        if x.quantity > lot["quantity_available"]:
+            raise HTTPException(400, "The requested fabric quantity is not available.")
+        assignment = dict(
+            id=uid(), lot_id=x.lot_id, order_id=x.order_id,
+            quantity_reserved=x.quantity, quantity_consumed=0,
+            quantity_wasted=0, quantity_released=0, status="Reserved",
+            notes=x.notes, created=now(),
+        )
+        c.execute(fabric_assignments.insert().values(**assignment))
+        c.execute(fabric_lots.update().where(fabric_lots.c.id == x.lot_id).values(
+            quantity_available=lot["quantity_available"] - x.quantity,
+            quantity_reserved=lot["quantity_reserved"] + x.quantity,
+        ))
+        c.execute(fabric_transactions.insert().values(
+            id=uid(), lot_id=x.lot_id, assignment_id=assignment["id"],
+            order_id=x.order_id, customer_id=lot["customer_id"], type="reserved",
+            quantity=x.quantity, unit=lot["unit"], created=assignment["created"],
+            request_id=x.request_id, notes=x.notes,
+        ))
+        return assignment
+
+
+@app.post("/api/fabrics/assignments/{id}/consume")
+def consume_fabric(id: str, x: FabricConsumptionIn):
+    with lock, engine.begin() as c:
+        existing = c.execute(select(fabric_transactions).where(fabric_transactions.c.request_id == x.request_id)).mappings().first()
+        if existing:
+            waste = c.execute(
+                select(fabric_transactions.c.quantity).where(
+                    fabric_transactions.c.request_id == x.request_id + ":waste",
+                    fabric_transactions.c.type == "waste",
+                )
+            ).scalar()
+            if (
+                existing["type"] != "consumed"
+                or existing["assignment_id"] != id
+                or existing["quantity"] != x.quantity
+                or waste != (x.waste or None)
+            ):
+                raise HTTPException(409, "This fabric request was already used with different details.")
+            return get(c, fabric_assignments, id)
+        assignment = get(c, fabric_assignments, id)
+        remaining = assignment["quantity_reserved"] - assignment["quantity_consumed"] - assignment["quantity_wasted"] - assignment["quantity_released"]
+        if x.quantity + x.waste > remaining:
+            raise HTTPException(400, "Consumed and wasted fabric cannot exceed the reserved quantity.")
+        lot = get(c, fabric_lots, assignment["lot_id"])
+        status = "Consumed" if x.quantity + x.waste == remaining else "Partially consumed"
+        c.execute(fabric_assignments.update().where(fabric_assignments.c.id == id).values(
+            quantity_consumed=assignment["quantity_consumed"] + x.quantity,
+            quantity_wasted=assignment["quantity_wasted"] + x.waste,
+            status=status,
+        ))
+        c.execute(fabric_lots.update().where(fabric_lots.c.id == lot["id"]).values(
+            quantity_reserved=lot["quantity_reserved"] - x.quantity - x.waste,
+            quantity_consumed=lot["quantity_consumed"] + x.quantity,
+            quantity_wasted=lot["quantity_wasted"] + x.waste,
+        ))
+        c.execute(fabric_transactions.insert().values(
+            id=uid(), lot_id=lot["id"], assignment_id=id, order_id=assignment["order_id"],
+            customer_id=lot["customer_id"], type="consumed", quantity=x.quantity,
+            unit=lot["unit"], created=now(), request_id=x.request_id, notes=x.notes,
+        ))
+        if x.waste:
+            c.execute(fabric_transactions.insert().values(
+                id=uid(), lot_id=lot["id"], assignment_id=id, order_id=assignment["order_id"],
+                customer_id=lot["customer_id"], type="waste", quantity=x.waste,
+                unit=lot["unit"], created=now(), request_id=x.request_id + ":waste", notes=x.notes,
+            ))
+        return get(c, fabric_assignments, id)
+
+
+@app.post("/api/fabrics/assignments/{id}/release")
+def release_fabric(id: str, x: FabricReleaseIn):
+    with lock, engine.begin() as c:
+        existing = c.execute(select(fabric_transactions).where(fabric_transactions.c.request_id == x.request_id)).mappings().first()
+        if existing:
+            if (
+                existing["type"] != "released"
+                or existing["assignment_id"] != id
+                or existing["quantity"] != x.quantity
+            ):
+                raise HTTPException(409, "This fabric request was already used with different details.")
+            return get(c, fabric_assignments, id)
+        assignment = get(c, fabric_assignments, id)
+        remaining = assignment["quantity_reserved"] - assignment["quantity_consumed"] - assignment["quantity_wasted"] - assignment["quantity_released"]
+        if x.quantity > remaining:
+            raise HTTPException(400, "Released fabric cannot exceed the unconsumed reservation.")
+        lot = get(c, fabric_lots, assignment["lot_id"])
+        released = assignment["quantity_released"] + x.quantity
+        status = "Released" if released + assignment["quantity_consumed"] + assignment["quantity_wasted"] == assignment["quantity_reserved"] else "Partially released"
+        c.execute(fabric_assignments.update().where(fabric_assignments.c.id == id).values(
+            quantity_released=released, status=status,
+        ))
+        c.execute(fabric_lots.update().where(fabric_lots.c.id == lot["id"]).values(
+            quantity_available=lot["quantity_available"] + x.quantity,
+            quantity_reserved=lot["quantity_reserved"] - x.quantity,
+        ))
+        c.execute(fabric_transactions.insert().values(
+            id=uid(), lot_id=lot["id"], assignment_id=id, order_id=assignment["order_id"],
+            customer_id=lot["customer_id"], type="released", quantity=x.quantity,
+            unit=lot["unit"], created=now(), request_id=x.request_id, notes=x.notes,
+        ))
+        return get(c, fabric_assignments, id)
+
+
+@app.post("/api/fabrics/lots/{id}/return")
+def return_customer_fabric(id: str, x: FabricReturnIn):
+    with lock, engine.begin() as c:
+        existing = c.execute(select(fabric_transactions).where(fabric_transactions.c.request_id == x.request_id)).mappings().first()
+        if existing:
+            if (
+                existing["type"] != "returned"
+                or existing["lot_id"] != id
+                or existing["quantity"] != x.quantity
+            ):
+                raise HTTPException(409, "This fabric request was already used with different details.")
+            return get(c, fabric_lots, id)
+        lot = get(c, fabric_lots, id)
+        if lot["owner_type"] != "Customer":
+            raise HTTPException(400, "Only customer-owned fabric can be returned through this ledger.")
+        if x.quantity > lot["quantity_available"]:
+            raise HTTPException(400, "Return quantity cannot exceed the available customer fabric.")
+        c.execute(fabric_lots.update().where(fabric_lots.c.id == id).values(
+            quantity_available=lot["quantity_available"] - x.quantity,
+            quantity_returned=lot["quantity_returned"] + x.quantity,
+        ))
+        c.execute(fabric_transactions.insert().values(
+            id=uid(), lot_id=id, assignment_id=None, order_id=None,
+            customer_id=lot["customer_id"], type="returned", quantity=x.quantity,
+            unit=lot["unit"], created=now(), request_id=x.request_id, notes=x.notes,
+        ))
+        return get(c, fabric_lots, id)
+
+
 @app.put("/api/settings")
 def set_settings(x: SettingsIn):
     with lock, engine.begin() as c:
@@ -627,7 +960,7 @@ def restore(file: UploadFile):
                     raise ValueError()
                 if (
                     src.execute("SELECT version_num FROM alembic_version").fetchone()[0]
-                    != "0001"
+                    != "0002"
                 ):
                     raise ValueError()
                 for t in meta.tables.values():
@@ -704,10 +1037,30 @@ def restore(file: UploadFile):
                             raise ValueError()
                     elif row["amount"] < 0:
                         raise ValueError()
-                for row in src.execute(
-                    "SELECT snapshot FROM order_items WHERE snapshot IS NOT NULL"
-                ):
-                    json.loads(row[0])
+                for row in src.execute("SELECT * FROM fabric_catalog"):
+                    FabricCatalogIn.model_validate({
+                        "code": row["code"], "name": row["name"],
+                        "fabric_type": row["fabric_type"], "color": row["color"],
+                        "quality": row["quality"], "unit": row["unit"],
+                        "default_purchase_cost": row["default_purchase_cost"],
+                        "default_selling_price": row["default_selling_price"],
+                        "notes": row["notes"],
+                    })
+                for row in src.execute("SELECT * FROM fabric_lots"):
+                    if row["owner_type"] not in ("Shop", "Customer") or any(
+                        row[k] < 0 for k in (
+                            "quantity_received", "quantity_available", "quantity_reserved",
+                            "quantity_consumed", "quantity_wasted", "quantity_returned",
+                        )
+                    ) or row["quantity_available"] + row["quantity_reserved"] + row["quantity_consumed"] + row["quantity_wasted"] + row["quantity_returned"] > row["quantity_received"]:
+                        raise ValueError()
+                    if row["owner_type"] == "Customer" and not row["customer_id"]:
+                        raise ValueError()
+                for row in src.execute("SELECT * FROM fabric_assignments"):
+                    if any(row[k] < 0 for k in ("quantity_reserved", "quantity_consumed", "quantity_wasted", "quantity_released")):
+                        raise ValueError()
+                for row in src.execute("SELECT * FROM order_items WHERE snapshot IS NOT NULL"):
+                    json.loads(row["snapshot"])
                 if src.execute(
                     "SELECT name FROM sqlite_master WHERE type IN ('trigger','view')"
                 ).fetchall():
