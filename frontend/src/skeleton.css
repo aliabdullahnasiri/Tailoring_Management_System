@@ -6,10 +6,48 @@
 .skeleton-row{display:grid;grid-template-columns:1.3fr 1fr 1fr .7fr;gap:24px;padding:20px;border-bottom:1px solid var(--line)}.skeleton-row:last-child{border-bottom:0}
 .skeleton-field{margin-block:22px}.page-skeleton .customer-card>.skeleton-bone{display:block}
 .account-skeleton{min-height:100vh;display:grid;place-items:center;padding:24px}.account-skeleton>div{width:min(380px,100%)}
+.fabric-skeleton .skeleton-bone{flex:none;margin:0}
+.fabric-skeleton .fabric-intro-copy{display:flex;flex-direction:column;gap:10px}
+.fabric-skeleton .skeleton-eyebrow{width:128px;height:10px}
+.fabric-skeleton .fabric-intro-copy .skeleton-title{width:min(390px,75%);height:30px}
+.fabric-skeleton .fabric-intro-copy>.skeleton-bone:nth-child(3){width:min(520px,90%)}
+.fabric-skeleton .fabric-intro-copy>.skeleton-bone:nth-child(4){width:min(340px,65%)}
+.fabric-skeleton .fabric-intro-actions .skeleton-button{width:150px;max-width:31%;height:40px}
+.fabric-skeleton .fabric-page-nav .skeleton-control{flex:0 0 110px;width:110px;height:42px}
+.fabric-skeleton .fabric-stats>div{gap:10px}
+.fabric-skeleton .fabric-stats .skeleton-short{width:65%}
+.fabric-skeleton .fabric-stats .skeleton-number{width:44%;height:30px;margin:0}
+.fabric-skeleton .fabric-stats .skeleton-bone:last-child{width:78%}
+.fabric-skeleton .fabric-chart-card .card-heading .skeleton-title{width:155px}
+.fabric-skeleton .fabric-chart-card .card-heading .skeleton-short{width:105px}
+.fabric-skeleton-bars{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:end;gap:clamp(8px,1.5vw,18px);height:196px;margin-bottom:10px;padding:12px 8px 26px;border-bottom:1px solid var(--fabric-outline);background:repeating-linear-gradient(to bottom,var(--fabric-outline) 0,var(--fabric-outline) 1px,transparent 1px,transparent 55px);background-size:100% calc(100% - 26px);background-repeat:no-repeat}
+.fabric-skeleton-bars .skeleton-bar{width:65%;height:40%;justify-self:center;align-self:end;border-radius:6px 6px 2px 2px}
+.fabric-skeleton-bars .skeleton-bar:nth-child(2){height:65%}
+.fabric-skeleton-bars .skeleton-bar:nth-child(3){height:48%}
+.fabric-skeleton-bars .skeleton-bar:nth-child(4){height:82%}
+.fabric-skeleton-bars .skeleton-bar:nth-child(5){height:57%}
+.fabric-skeleton-bars .skeleton-bar:nth-child(6){height:72%}
+.fabric-skeleton-bars .skeleton-bar:nth-child(7){height:44%}
+.fabric-skeleton .fabric-chart-card>.skeleton-short{width:120px}
+.fabric-skeleton-allocation{display:flex;align-items:center;justify-content:center;gap:clamp(16px,2vw,28px);min-height:196px;margin-bottom:10px}
+.fabric-skeleton-donut{display:grid;flex:none;place-items:center;width:158px;height:158px;border:14px solid #dfe7df;border-inline-start-color:#aab8a6;border-bottom-color:#b9c9b4;border-radius:50%}
+.fabric-skeleton-donut .skeleton-short{width:48px;height:18px}
+.fabric-skeleton-allocation>div:last-child{display:flex;flex:1;flex-direction:column;gap:14px;max-width:200px}
+.fabric-skeleton-allocation>div:last-child .skeleton-bone{width:100%;height:14px}
+.fabric-skeleton .fabric-activity-card .card-heading{align-items:center}
+.fabric-skeleton .fabric-activity-card .card-heading .skeleton-title{width:190px}
+.fabric-skeleton .fabric-activity-card .card-heading .skeleton-short{width:240px}
+.fabric-skeleton .fabric-ledger-row .skeleton-avatar{flex:none}
+.fabric-skeleton .fabric-ledger-row>div{display:flex;flex-direction:column;gap:8px}
+.fabric-skeleton .fabric-ledger-row>div .skeleton-short{width:32%}
+.fabric-skeleton .fabric-ledger-row>div .skeleton-bone:last-child{width:54%}
+.fabric-skeleton .fabric-ledger-row>.skeleton-short{width:68px;height:14px}
 [data-theme="dark"] .skeleton-bone{background:#304138}
+[data-theme="dark"] .fabric-skeleton-donut{border-color:#304138;border-inline-start-color:#607765;border-bottom-color:#4a6250}
 @keyframes skeleton-shimmer{from{translate:-100% 0}to{translate:100% 0}}
 @media screen and (prefers-reduced-motion:no-preference){
  .skeleton-bone::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,#ffffff55,transparent);animation:skeleton-shimmer 1.8s ease-in-out infinite}
  [data-theme="dark"] .skeleton-bone::after{background:linear-gradient(90deg,transparent,#ffffff0d,transparent)}
 }
 @media(max-width:720px){.skeleton-row{gap:12px;padding:16px;grid-template-columns:1.3fr 1fr .8fr}.skeleton-row>.skeleton-bone:last-child{display:none}}
+@media(max-width:620px){.fabric-skeleton .fabric-intro-copy .skeleton-title{width:80%}.fabric-skeleton .fabric-intro-actions .skeleton-button{width:100%;max-width:none}.fabric-skeleton .fabric-chart-card{min-height:0}.fabric-skeleton-allocation{flex-wrap:wrap}.fabric-skeleton-allocation>div:last-child{flex-basis:100%;max-width:none}.fabric-skeleton .fabric-activity-card .card-heading .skeleton-short{width:180px}}
