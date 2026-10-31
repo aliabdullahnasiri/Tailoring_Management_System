@@ -162,7 +162,8 @@ Verify the effective path through the actual current configuration before modify
 | Full Dari/Pashto translation | Navigation/RTL preview existed; all screens unverified | `PARTIAL / UNVERIFIED` |
 | English UI | Complete baseline English version | `BASELINE VERIFIED` |
 | Theme switching and premium visual redesign | Design target in `DESIGN.md`; newer state unverified | `PARTIAL / UNVERIFIED` |
-| Advanced production / tailors / inventory | Detailed PRD requirements; not baseline-confirmed | `PLANNED` |
+| Fabric management | Traceable shop/customer fabric lots, assignments, consumption, waste, returns, and transaction ledger | `PARTIAL / UNVERIFIED` |
+| Advanced production / tailors / inventory | Detailed PRD requirements; production, workers, and general inventory remain unverified | `PLANNED` |
 | Expense accounting / payroll / multibranch | Roadmap items, not baseline-confirmed | `PLANNED` |
 | Jalali date display/entry | Future localization enhancement | `PLANNED` |
 
