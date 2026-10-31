@@ -68,3 +68,11 @@ frontend/src-tauri/target/
 frontend/src-tauri/gen/
 frontend/src-tauri/binaries/*
 tailoring-ms-*.zip
+# prowl-agent: derived state
+.prowl/index.db*
+.prowl/cache/
+.prowl/logs/
+.prowl/editor/
+.prowl/setup-applies.json
+.prowl-setup.lock
+# /prowl-agent: derived state
