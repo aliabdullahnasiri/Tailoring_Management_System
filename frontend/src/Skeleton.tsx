@@ -13,11 +13,40 @@ function Table() {
 function Form({fields=4}:{fields?:number}) {
  return <div className="card settings-card"><Bone kind="title"/>{Array.from({length:fields},(_,i)=><div className="skeleton-field" key={i}><Bone kind="short"/><Bone kind="control"/></div>)}<Bone kind="button"/></div>;
 }
+function FabricSkeleton() {
+ return <div className="fabric-module fabric-module-refined fabric-skeleton">
+  <header className="fabric-intro fabric-intro-refined">
+   <div className="fabric-intro-copy"><Bone kind="eyebrow"/><Bone kind="title"/><Bone/><Bone kind="short"/></div>
+   <div className="fabric-intro-actions"><Bone kind="button"/><Bone kind="button"/><Bone kind="button"/></div>
+  </header>
+  <nav className="fabric-page-nav fabric-tabs">{Array.from({length:5},(_,i)=><Bone kind="control" key={i}/>)}</nav>
+  <div className="fabric-page-content">
+   <div className="fabric-stats">{Array.from({length:4},(_,i)=><div key={i}><Bone kind="short"/><Bone kind="number"/><Bone/></div>)}</div>
+   <div className="fabric-overview-charts">
+    <section className="card fabric-chart-card">
+     <div className="card-heading"><div><Bone kind="title"/><Bone kind="short"/></div><Bone kind="short"/></div>
+     <div className="fabric-skeleton-bars">{Array.from({length:7},(_,i)=><Bone kind="bar" key={i}/>)}</div>
+     <Bone kind="short"/>
+    </section>
+    <section className="card fabric-chart-card">
+     <div className="card-heading"><div><Bone kind="title"/><Bone kind="short"/></div><Bone kind="short"/></div>
+     <div className="fabric-skeleton-allocation"><div className="fabric-skeleton-donut"><Bone kind="short"/></div><div>{Array.from({length:3},(_,i)=><Bone key={i}/>)}</div></div>
+     <Bone kind="short"/>
+    </section>
+   </div>
+   <section className="card fabric-activity-card">
+    <div className="card-heading"><div><Bone kind="title"/><Bone kind="short"/></div><Bone kind="avatar"/></div>
+    <div className="fabric-ledger">{Array.from({length:4},(_,i)=><div className="fabric-ledger-row" key={i}><Bone kind="avatar"/><div><Bone kind="short"/><Bone/></div><Bone kind="short"/></div>)}</div>
+   </section>
+  </div>
+ </div>;
+}
 export function PageSkeleton({page}:{page:string}) {
  return <div className="page-skeleton" role="status" aria-label={t('Loading {page}…',{page:t(page)})}>
   <span className="visually-hidden">{t('Loading {page}…',{page:t(page)})}</span>
   <div aria-hidden="true">
-   {page==='Dashboard'?<><Stats count={4}/><div className="dashboard-grid"><Table/><div className="side-stack"><Form fields={1}/><Form fields={1}/></div></div></>:
+   {page==='Fabric Management'?<FabricSkeleton/>:
+    page==='Dashboard'?<><Stats count={4}/><div className="dashboard-grid"><Table/><div className="side-stack"><Form fields={1}/><Form fields={1}/></div></div></>:
     page==='Customers'?<div className="card"><div className="skeleton-toolbar"><Bone kind="title"/><Bone kind="control"/></div><div className="customer-grid">{Array.from({length:6},(_,i)=><div className="customer-card" key={i}><Bone kind="avatar"/><Bone kind="title"/><Bone/><Bone kind="short"/></div>)}</div></div>:
     page==='Settings'?<div className="settings-grid"><Form fields={5}/><div className="side-stack"><Form fields={1}/><Form fields={2}/></div></div>:
     page==='Payments'?<><Stats/><Table/><div className="spaced"><Table/></div></>:
